@@ -1,0 +1,91 @@
+// Kankoni Finsol — Prisma schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id          String   @id @default(cuid())
+  name        String
+  email       String?
+  phone       String
+  city        String?
+  service     String
+  loanAmount  String?
+  employment  String?
+  income      String?
+  creditScore String?
+  message     String?
+  status      String   @default("new") // new | contacted | qualified | disbursed | rejected
+  source      String   @default("website")
+  assignedTo  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+  @@index([service])
+  @@index([createdAt])
+}
+
+model Callback {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  preferredTime String?
+  service   String?
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  sessionId String   @unique
+  userAgent String?
+  messages  Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  city      String?
+  service   String?
+  rating    Int      @default(5)
+  title     String
+  message   String
+  verified  Boolean  @default(true)
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String
+  category    String
+  author      String   @default("Kankoni Finsol")
+  readTime    Int      @default(5)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
