@@ -8,15 +8,17 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { services } from "@/lib/site-data";
 import { companyInfo } from "@/lib/site-data";
+import { useQuickApply } from "@/lib/quick-apply-store";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
+  { label: "Process", href: "#process" },
   { label: "Eligibility", href: "#eligibility" },
   { label: "EMI Calculator", href: "#emi" },
-  { label: "Compare", href: "#compare" },
+  { label: "About", href: "#about" },
   { label: "Partners", href: "#partners" },
   { label: "Reviews", href: "#reviews" },
   { label: "Resources", href: "#resources" },
@@ -65,6 +67,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
   const [servicesOpen, setServicesOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const openModal = useQuickApply((s) => s.openModal);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -173,10 +176,10 @@ export function Navbar() {
             {companyInfo.phone}
           </a>
           <Button
-            asChild
+            onClick={() => openModal("Personal Loan")}
             className="hidden rounded-full bg-royal-gradient px-5 text-sm font-semibold text-white shadow-royal-glow hover:opacity-95 md:inline-flex"
           >
-            <a href="#contact">Apply Now</a>
+            Apply Now
           </Button>
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -223,13 +226,12 @@ export function Navbar() {
                     </a>
                   ))}
                 </div>
-                <a
-                  href="#contact"
-                  onClick={() => setMobileOpen(false)}
-                  className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-royal-gradient px-5 py-3 text-sm font-semibold text-white shadow-royal-glow"
+                <button
+                  onClick={() => { setMobileOpen(false); openModal("Personal Loan"); }}
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-royal-gradient px-5 py-3 text-sm font-semibold text-white shadow-royal-glow"
                 >
                   <Sparkles className="h-4 w-4" /> Apply Now
-                </a>
+                </button>
                 <a
                   href={companyInfo.phoneHref}
                   className="mt-2 flex items-center justify-center gap-2 rounded-xl border border-border/70 px-5 py-3 text-sm font-medium"

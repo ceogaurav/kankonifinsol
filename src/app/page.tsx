@@ -2,12 +2,14 @@ import { Navbar } from "@/components/sections/navbar";
 import { Hero } from "@/components/sections/hero";
 import { TrustBar } from "@/components/sections/trust-bar";
 import { Services } from "@/components/sections/services";
+import { HowItWorks } from "@/components/sections/how-it-works";
 import { EligibilityChecker } from "@/components/sections/eligibility-checker";
 import { EMICalculator } from "@/components/sections/emi-calculator";
 import { CompareLoans } from "@/components/sections/compare-loans";
 import { WhyChooseUs } from "@/components/sections/why-choose-us";
-import { Reviews } from "@/components/sections/reviews";
+import { About } from "@/components/sections/about";
 import { BankingPartners } from "@/components/sections/banking-partners";
+import { Reviews } from "@/components/sections/reviews";
 import { Resources } from "@/components/sections/resources";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/sections/footer";
@@ -15,19 +17,25 @@ import { AIAssistant } from "@/components/sections/ai-assistant";
 import {
   WhatsAppButton, StickyApplyCTA, ExitIntentPopup,
 } from "@/components/sections/floating-widgets";
+import { BackToTop } from "@/components/sections/back-to-top";
+import { QuickApplyModal } from "@/components/sections/quick-apply-modal";
+import { ScrollProgress } from "@/components/site/scroll-progress";
 
 export default function Home() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-background">
+      <ScrollProgress />
       <Navbar />
       <main className="flex-1">
         <Hero />
         <TrustBar />
         <Services />
+        <HowItWorks />
         <EligibilityChecker />
         <EMICalculator />
         <CompareLoans />
         <WhyChooseUs />
+        <About />
         <BankingPartners />
         <Reviews />
         <Resources />
@@ -39,7 +47,9 @@ export default function Home() {
       <AIAssistant />
       <WhatsAppButton />
       <StickyApplyCTA />
+      <BackToTop />
       <ExitIntentPopup />
+      <QuickApplyModal />
     </div>
   );
 }

@@ -69,3 +69,60 @@ Unresolved / Next-phase recommendations:
 - Auth (NextAuth OTP login, role-based access) not yet implemented.
 - Real bank/bank-logo images could replace the generated monogram tiles for extra polish.
 - Could add a blog detail route + CMS for the blog posts (currently static cards).
+
+---
+Task ID: webDevReview-round-1
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA the current site, fix bugs, add new features (About, How It Works, Quick-Apply modal), improve styling
+
+## 1. Current project status description/assessment
+The Kankoni Finsol fintech website was already production-ready with 12 sections + 4 floating widgets, all verified working in the previous session. Backend APIs (leads, chat, eligibility, callback, contact, reviews, seed) are functional with rate limiting and LLM integration. Both dark/light themes work. No bugs were found during QA — VLM analysis of all 14 sections (desktop + mobile + light theme) reported "OK" across the board.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- Ran `bun run lint` — clean.
+- Captured screenshots of all 14 sections at desktop 1440x900 (hero, services, process, eligibility, emi, compare, why-choose-us, about, partners, reviews, resources, contact, footer) + light theme + mobile 390x844.
+- VLM-analyzed every screenshot: NO visual bugs found (no overflow, cutoff, broken layout, or contrast issues).
+- Checked dev.log: no runtime errors.
+
+### New features added
+1. **ScrollProgress bar** (`src/components/site/scroll-progress.tsx`): Premium gold/royal gradient progress bar fixed at top of viewport (z-60, h-1.5) that fills as user scrolls. Uses Framer Motion `useScroll` + `useSpring` for smooth animation. Verified visible at 50% scroll (729px wide).
+
+2. **HowItWorks section** (`src/components/sections/how-it-works.tsx`): Premium 4-step process section (Apply in 60 seconds → Compare 100+ banks → Get approved fast → Money in your account). Features animated connecting gradient line between steps on desktop, step-number badges, duration pills, hover effects, and a CTA strip. ID: `#process`.
+
+3. **About section** (`src/components/sections/about.tsx`): Comprehensive company section with: Mission & Vision cards, vertical journey timeline (5 milestones 2018→2025 with alternating layout), leadership team (4 members with avatars/roles/bios), awards grid (4 awards), and an impact stats strip with animated counters on a royal-gradient background. ID: `#about`.
+
+4. **QuickApplyModal** (`src/components/sections/quick-apply-modal.tsx` + `src/lib/quick-apply-store.ts`): Contextual quick-apply modal triggered from service card "Apply Now" buttons, navbar "Apply Now", and hero "Apply Now". Uses Zustand store for state. Shows the selected service's rate/max/tenure, pre-fills the service field, posts to /api/leads, shows success state. Escape-to-close, body scroll lock, backdrop click to close. Verified end-to-end: modal opened with "Personal Loan" → typed name/phone via real keystrokes → submitted → "Application received!" success → lead saved to DB ("Modal User", "9123456789", "Personal Loan").
+
+5. **BackToTop button** (`src/components/sections/back-to-top.tsx`): Floating button that appears after scrolling 700px, smooth-scrolls to top. Positioned to not overlap with other floating widgets.
+
+### Wiring changes
+- **Services cards**: "Apply Now" buttons now open the QuickApplyModal with the service name pre-filled (was: link to #contact).
+- **Navbar**: "Apply Now" button now opens QuickApplyModal (was: link to #contact). Added "Process" and "About" nav links. Mobile menu Apply button also opens modal.
+- **Hero**: "Apply Now" button now opens QuickApplyModal (was: link to #contact).
+- **page.tsx**: Integrated ScrollProgress, HowItWorks (after Services), About (after WhyChooseUs), BackToTop, QuickApplyModal. Page now has 14 sections.
+
+### Styling improvements
+- Scroll progress bar with gold glow shadow.
+- HowItWorks: animated gradient connecting line, step circles with hover lift, duration pills.
+- About: mission/vision cards with glow effects, alternating timeline, leadership cards with accent colors, impact stats on gradient background.
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles and returns 200.
+- All 14 sections present in DOM (verified via section ID enumeration).
+- QuickApplyModal verified end-to-end: opens with correct service, accepts input, submits to API, saves lead to DB, shows success state.
+- ScrollProgress verified: visible at 50% scroll (729px wide, 6px tall, gradient colors).
+- BackToTop verified: appears after 700px scroll.
+- New sections (HowItWorks, About) VLM-verified: OK on desktop and mobile (390x844), no visual bugs.
+- Dev.log: no errors, POST /api/leads 201 confirmed for modal submission.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Minor**: The `/api/leads` route doesn't pass through the `source` field from the request body (defaults to "website" for all leads, including quick-apply-modal submissions). Low priority — could add source passthrough for analytics.
+- **Admin panel**: Still not built. DB schema supports it (Lead, Callback, ContactMessage models). Could add a dedicated admin route with lead analytics, assign leads, status tracking.
+- **Auth**: NextAuth OTP login and role-based access not yet implemented.
+- **Blog detail pages**: Blog cards are static; could add a blog detail route or expandable content.
+- **Real bank logos**: Currently using monogram tiles; could use real bank logo images for extra polish.
+- **Performance**: Page is now very long (14 sections); could add lazy loading / Suspense for below-the-fold sections to improve LCP.
+- **A/B test CTAs**: Multiple "Apply Now" entry points (navbar, hero, service cards, how-it-works, contact, sticky mobile, exit-intent) — could add UTM/source tracking to measure conversion.

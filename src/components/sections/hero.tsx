@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { MagneticButton, Reveal, AnimatedCounter } from "@/components/site/primitives";
 import { companyInfo } from "@/lib/site-data";
+import { useQuickApply } from "@/lib/quick-apply-store";
 
 const whatsappLink = `https://wa.me/${companyInfo.whatsapp}?text=${encodeURIComponent(
   "Hi Kankoni Finsol, I'd like to know more about your loan offers."
@@ -131,6 +132,7 @@ function HeroVisual() {
 }
 
 export function Hero() {
+  const openModal = useQuickApply((s) => s.openModal);
   return (
     <section
       id="home"
@@ -173,8 +175,7 @@ export function Hero() {
           <Reveal delay={0.24}>
             <div className="flex flex-wrap items-center gap-3">
               <MagneticButton
-                as="a"
-                href="#contact"
+                onClick={() => openModal("Personal Loan")}
                 className="group inline-flex items-center gap-2 rounded-full bg-royal-gradient px-6 py-3.5 text-sm font-semibold text-white shadow-royal-glow"
               >
                 <Sparkles className="h-4 w-4" />
