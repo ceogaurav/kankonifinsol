@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export function QuickApplyModal() {
-  const { open, serviceName, closeModal } = useQuickApply();
+  const { open, serviceName, prefillAmount, prefillSource, closeModal } = useQuickApply();
   const [loading, setLoading] = React.useState(false);
   const [done, setDone] = React.useState(false);
   const [form, setForm] = React.useState({
@@ -30,16 +30,17 @@ export function QuickApplyModal() {
     }
   }, []);
 
-  // reset when opened
+  // reset when opened — prefill amount from eligibility result if provided
   React.useEffect(() => {
     if (open) {
       setDone(false);
       setForm((p) => ({
-        name: "", phone: "", email: "", city: "", loanAmount: "",
+        name: "", phone: "", email: "", city: "",
+        loanAmount: prefillAmount || "",
         promoCode: p.promoCode, // preserve detected promo code
       }));
     }
-  }, [open, serviceName]);
+  }, [open, serviceName, prefillAmount]);
 
   // close on Escape
   React.useEffect(() => {
@@ -71,7 +72,7 @@ export function QuickApplyModal() {
         body: JSON.stringify({
           ...form,
           service: serviceName,
-          source: "quick-apply-modal",
+          source: prefillSource || "quick-apply-modal",
           promoCode: form.promoCode || undefined,
         }),
       });

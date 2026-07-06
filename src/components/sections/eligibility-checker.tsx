@@ -7,6 +7,7 @@ import {
   TrendingUp, CheckCircle2, ArrowRight, Lightbulb,
 } from "lucide-react";
 import { SectionHeading, Reveal } from "@/components/site/primitives";
+import { useQuickApply } from "@/lib/quick-apply-store";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -25,6 +26,7 @@ interface EligibilityResult {
 }
 
 export function EligibilityChecker() {
+  const openApply = useQuickApply((s) => s.openModal);
   const [income, setIncome] = React.useState(75000);
   const [employment, setEmployment] = React.useState("Salaried");
   const [creditScore, setCreditScore] = React.useState(760);
@@ -304,12 +306,13 @@ export function EligibilityChecker() {
                       </div>
                     )}
 
-                    <a
-                      href="#contact"
-                      className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-royal-gradient py-3 text-sm font-semibold text-white shadow-royal-glow"
+                    <button
+                      type="button"
+                      onClick={() => openApply(loanType, { amount: String(loanAmount), source: "eligibility-result" })}
+                      className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-royal-gradient py-3 text-sm font-semibold text-white shadow-royal-glow"
                     >
                       Apply Now <ArrowRight className="h-4 w-4" />
-                    </a>
+                    </button>
                   </motion.div>
                 )}
               </AnimatePresence>

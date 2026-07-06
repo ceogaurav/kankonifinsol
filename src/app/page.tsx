@@ -7,6 +7,7 @@ import { EligibilityChecker } from "@/components/sections/eligibility-checker";
 import { EMICalculator } from "@/components/sections/emi-calculator";
 import { EMICalculatorPro } from "@/components/sections/emi-calculator-pro";
 import { CompareLoans } from "@/components/sections/compare-loans";
+import { CompareMatrix } from "@/components/sections/compare-matrix";
 import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import { About } from "@/components/sections/about";
 import { InsightsDashboard } from "@/components/sections/insights-dashboard";
@@ -39,6 +40,7 @@ export default function Home() {
         <EMICalculator />
         <EMICalculatorPro />
         <CompareLoans />
+        <CompareMatrix />
         <WhyChooseUs />
         <About />
         <InsightsDashboard />

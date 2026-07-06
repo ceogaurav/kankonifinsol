@@ -314,3 +314,67 @@ The Kankoni Finsol website was stable from round 3 with 16 sections + floating w
 - **Rate-limit persistence**: In-memory rate limiter resets on server restart.
 - **Referral rewards tracking**: Currently promo codes are stored on leads but there's no dashboard view of "leads by referral code" or reward calculation. Could add a referral analytics view to the admin dashboard.
 - **Notifications**: Admin dashboard could use real-time notifications (WebSocket) for new leads instead of manual refresh.
+
+---
+Task ID: webDevReview-round-5
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, expand blog content, add eligibility→apply smart pre-fill + service comparison matrix + styling polish
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from round 4 with 18 sections + floating widgets, all verified working. QA this round confirmed: lint clean, dev server healthy (200 responses), all 18 sections present in DOM, no runtime errors. The site is production-ready and now enhanced with smarter conversion flows, richer content, and a feature comparison matrix. The site now has 19 sections.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- agent-browser verified all sections render.
+- Dev log clean, no errors.
+
+### New features added
+
+1. **Service Comparison Matrix** (`src/components/sections/compare-matrix.tsx`): A feature×loan-type grid section (`#compare-matrix`) that compares 5 loan types (Home, Personal, Car, Business, LAP) across 10 features (interest rate, max amount, tenure, collateral required, disbursal speed, tax benefit, prepayment charges, balance transfer, top-up facility, doorstep service). Features:
+   - Sticky first column (feature names) for horizontal scroll usability.
+   - Column highlight on hover (royal tint) for easy scanning.
+   - Boolean values rendered as colored check (royal) / X (muted) badges; text values rendered as-is.
+   - Per-column Apply buttons that open QuickApplyModal with the loan type pre-filled (source: "compare-matrix").
+   - Gold CTA box linking to the eligibility checker.
+   Verified: VLM-confirmed OK on desktop and mobile (390×844, horizontally scrollable).
+
+2. **Eligibility→Apply Smart Pre-fill**: Enhanced the conversion flow from the AI Eligibility Checker to the QuickApplyModal. When a user gets their eligibility result and clicks "Apply Now", the modal now opens with:
+   - The loan type pre-selected (matching the eligibility checker's chosen loan type).
+   - The desired loan amount pre-filled (from the eligibility form input).
+   - The lead source tagged as "eligibility-result" for conversion tracking.
+   Implementation: Extended the `useQuickApply` Zustand store to accept `{ amount, source }` options in `openModal()`. Updated the QuickApplyModal to consume `prefillAmount` and `prefillSource`. Updated the eligibility checker's Apply button to call `openApply(loanType, { amount, source })`.
+   Verified: ran eligibility check → clicked Apply Now in result → modal opened with "Personal Loan" header + amount "1500000" pre-filled.
+
+### Content expansion
+
+3. **Blog content for 4 remaining posts** (`src/lib/site-data.ts`): Wrote full long-form articles for the 4 blog posts that previously used generic placeholder content:
+   - **"tax-saving-2025"** — Section 80C comparison of ELSS, PPF, NPS, tax-saver FD, and life insurance with lock-in/returns/risk/best-for breakdowns, a verdict favoring ELSS SIPs, and beyond-80C stacking advice.
+   - **"emi-decoded"** — The EMI formula, front-loaded interest truth (with a ₹50L/20yr worked example showing 78% interest in year 1), tenure vs. total-interest tradeoff, and the prepayment superpower.
+   - **"msme-loan-schemes"** — 5 government schemes (CGTMSE, PMMY/Mudra, Stand-Up India, PSB Loans in 59 Minutes, SIDBI) with what/who/benefit/access details.
+   - **"balance-transfer-right-time"** — The break-even formula, a worked example (₹40L transfer saving ₹3.4L), when NOT to transfer, and hidden costs to watch for.
+   All 6 blog posts now have full, expert-quality long-form content. Verified: opened the 4th article ("EMI Decoded") in the blog detail modal → VLM-confirmed full content with headings, formulas, examples, and bullet points.
+
+### Styling polish
+- Compare matrix: sticky feature column, hover column highlight, colored check/X badges, icon-topped column headers.
+- Smart pre-fill: seamless handoff with amount pre-filled (no re-entry needed).
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- All 19 sections present in DOM (home, trust, services, process, eligibility, emi, emi-pro, compare, compare-matrix, why-choose-us, about, insights, partners, reviews, resources, referral, contact, admin, footer).
+- Compare matrix: VLM-verified OK on desktop and mobile.
+- Eligibility→Apply pre-fill: verified loan amount "1500000" + service "Personal Loan" pre-filled the modal.
+- Blog content: "EMI Decoded" (4th article) shows full long-form content, VLM-verified OK.
+- Dev.log: no errors (POST /api/eligibility 200 confirmed for the pre-fill test).
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Auth hardening**: Admin key is still a simple env/constant check. Should implement NextAuth OTP login with role-based access (admin/employee/RM) and session management.
+- **Lead assignment UI**: The PATCH API supports `assignedTo` but the admin UI doesn't yet have an assignment dropdown. Could add an employee management feature.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is now very long (19 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart.
+- **Referral rewards tracking**: Promo codes are stored on leads but there's no admin dashboard view of "leads by referral code" or reward calculation.
+- **Notifications**: Admin dashboard could use real-time notifications (WebSocket) for new leads.
+- **A/B testing**: Multiple Apply entry points now tag sources (quick-apply-modal, eligibility-result, compare-matrix, contact-form, exit-intent) — could build a source-conversion funnel view in the admin dashboard.

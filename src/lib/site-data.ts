@@ -762,6 +762,145 @@ The age of your oldest credit line contributes to your score. Keep old cards act
 
 ## The myth that holds people back
 Many believe checking their own score hurts it. It doesn't. Soft enquiries (your own checks) have zero impact. Only hard enquiries (lender checks when you apply) matter — and even those recover within 3–6 months.`,
+  "tax-saving-2025": `Section 80C lets you deduct up to ₹1.5 lakh from your taxable income every year. The question isn't whether to use it — it's which instrument fits your goals.
+
+## The five main contenders
+
+### ELSS Mutual Funds
+- **Lock-in:** 3 years (shortest of all 80C options)
+- **Returns:** Market-linked, historically 12–15% over 5+ years
+- **Risk:** Equity risk — suitable for long-term horizons
+- **Best for:** Young earners with 7+ year horizons who want growth + tax savings
+
+### Public Provident Fund (PPF)
+- **Lock-in:** 15 years (partial withdrawal after 7 years)
+- **Returns:** Government-set, currently 7.1% p.a. (tax-free)
+- **Risk:** Sovereign-backed, capital-protected
+- **Best for:** Conservative savers building a retirement corpus
+
+### National Pension System (NPS)
+- **Lock-in:** Until age 60 (partial withdrawal allowed)
+- **Returns:** Market-linked (equity + debt), historically 10–12%
+- **Extra benefit:** Additional ₹50,000 deduction under 80CCD(1B)
+- **Best for:** Long-horizon retirement planning
+
+### 5-Year Tax-Saver Fixed Deposit
+- **Lock-in:** 5 years
+- **Returns:** 6.5–7.5% p.a. (taxable)
+- **Risk:** Capital-protected (DICGC insured up to ₹5 lakh)
+- **Best for:** Risk-averse investors who want guaranteed returns
+
+### Life Insurance Premium
+- **Lock-in:** Policy term
+- **Returns:** Low (4–6% IRR) — insurance is not an investment
+- **Best for:** Only if you genuinely need life cover; pure term plans are cheaper
+
+## The verdict
+For most investors under 45, a **monthly SIP in ELSS** maximises both tax savings and long-term wealth. The 3-year lock-in is the shortest in the 80C universe, and the power of compounding equity returns over 10+ years is unmatched.
+
+## Beyond 80C
+Don't stop at ₹1.5 lakh. NPS gives you another ₹50,000 under 80CCD(1B). Health insurance premiums are deductible under 80D (up to ₹25,000, or ₹50,000 for senior parents). Stack these intelligently and you can save ₹1 lakh+ in taxes annually while building real wealth.`,
+
+  "emi-decoded": `Your EMI isn't just a monthly number — it's a carefully engineered blend of principal and interest that shifts dramatically over your loan's life. Understanding it can save you lakhs.
+
+## The EMI formula, demystified
+EMI = P × r × (1+r)^n ÷ ((1+r)^n − 1)
+
+Where P = principal, r = monthly interest rate (annual rate ÷ 12 ÷ 100), and n = number of months.
+
+## The hidden truth: interest is front-loaded
+In the first year of a 20-year home loan, nearly 80% of each EMI goes toward interest. Only in the later years does the principal repayment dominate. This is why prepaying early saves dramatically more than prepaying late.
+
+### Example: ₹50 lakh home loan @ 8.5% for 20 years
+- **EMI:** ₹43,391/month
+- **Total payment over 20 years:** ₹1.04 crore (you pay more in interest than the principal itself!)
+- **Year 1:** ~78% of EMI is interest
+- **Year 15:** ~45% of EMI is interest
+- **Year 20:** ~8% of EMI is interest
+
+## Tenure isn't always your friend
+A longer tenure reduces your EMI but inflates your total interest dramatically. The same ₹50 lakh loan over 30 years instead of 20:
+- EMI drops from ₹43,391 to ₹38,446 (₹4,945 less/month)
+- But total interest jumps from ₹54 lakh to ₹88 lakh (₹34 lakh more!)
+
+## The prepayment superpower
+Even one extra EMI per year can cut a 20-year loan to 16 years. A 10% lump-sum prepayment in year 3 can save 3–4 years of tenure. Always direct prepayments toward **principal reduction**, not "advance EMIs".
+
+## The Kankoni approach
+We don't just find you the lowest rate — we model your amortisation, identify the optimal tenure for your cash flow, and build a prepayment strategy that saves you lakhs. Use our EMI calculator with the amortisation chart to see exactly where your money goes.`,
+
+  "msme-loan-schemes": `India runs over 63 million MSMEs, yet most owners don't know the government has earmarked thousands of crores in collateral-free credit specifically for them. Here are five schemes every small business owner should know.
+
+## 1. CGTMSE (Credit Guarantee Fund Trust for Micro and Small Enterprises)
+- **What:** Collateral-free loans up to ₹5 crore
+- **Who:** Micro and small enterprises (manufacturing & services)
+- **Coverage:** 75–85% of the loan amount is guaranteed by the government
+- **Key benefit:** No collateral, no third-party guarantee needed
+- **How to access:** Through any scheduled commercial bank — Kankoni can fast-track your application
+
+## 2. PMMY / Mudra Loan
+- **What:** Loans up to ₹10 lakh in three categories
+  - Shishu (up to ₹50,000) — for startups
+  - Kishore (₹50,001–₹5 lakh) — for early-stage businesses
+  - Tarun (₹5 lakh–₹10 lakh) — for growth-stage ventures
+- **Who:** Non-corporate, non-farm small businesses
+- **Key benefit:** Extremely low interest rates, minimal documentation
+
+## 3. Stand-Up India
+- **What:** Loans between ₹10 lakh and ₹1 crore
+- **Who:** SC/ST and women entrepreneurs setting up greenfield enterprises
+- **Key benefit:** 7-year tenure with a moratorium of up to 18 months
+
+## 4. PSB Loans in 59 Minutes
+- **What:** In-principle approval for loans up to ₹5 crore in under an hour
+- **Who:** MSMEs with a GST, income-tax and bank statement history
+- **Key benefit:** Speed — the platform connects directly to PSU banks
+
+## 5. SIDBI Small Finance
+- **What:** Direct financing from the Small Industries Development Bank
+- **Who:** Established MSMEs needing growth capital
+- **Key benefit:** Sector-specific expertise and longer tenures
+
+## How Kankoni helps MSMEs
+We assess your Udyam registration, GST returns and financials to match you with the right scheme and the right bank — often securing blended structures (e.g. a CGTMSE-covered term loan + an overdraft facility) that no single bank would proactively offer. Our MSME specialists handle the paperwork end-to-end.`,
+
+  "balance-transfer-right-time": `A balance transfer can save you lakhs — or cost you money if done wrong. Here's the simple break-even formula that tells you exactly when to switch.
+
+## When a balance transfer makes sense
+A transfer is worth it when the interest savings over the remaining tenure exceed the total cost of switching.
+
+### The break-even formula
+**Net savings = (Current rate − New rate) × Outstanding principal × Remaining years − [Processing fee + Legal/valuation charges + Stamp duty]**
+
+If net savings > 0, switch. If < 0, don't.
+
+### A worked example
+- Outstanding home loan: ₹40 lakh
+- Current rate: 9.8% p.a.
+- New rate offered: 8.5% p.a.
+- Remaining tenure: 18 years
+- Switching cost: ₹40,000 (processing + legal + stamp)
+
+**Interest saved per year:** (9.8% − 8.5%) × ₹40 lakh = ₹52,000
+**Total savings over 18 years:** ~₹5.2 lakh (reducing balance, so actual is ~₹3.8 lakh)
+**Net savings:** ₹3.8 lakh − ₹40,000 = **₹3.4 lakh** → switch!
+
+## When NOT to transfer
+1. **Less than 3 years remaining** — the switching cost often exceeds the savings
+2. **Your current rate is within 0.3% of the best offer** — switching costs eat the gain
+3. **You plan to prepay within 2 years** — you'll close the loan before realising savings
+4. **Your CIBIL has dropped since origination** — you may not qualify for the best new rate
+
+## Hidden costs to watch for
+- **Foreclosure charges** on your current loan (RBI bars these on floating-rate home loans, but fixed-rate loans may charge 2–4%)
+- **Processing fee** on the new loan (0.25–0.50% of the outstanding)
+- **Legal and valuation charges** (₹5,000–₹15,000)
+- **Stamp duty** on the new mortgage (varies by state)
+- **Top-up opportunity** — a transfer often unlocks a top-up loan at the same low rate
+
+## The Kankoni transfer service
+We compute your exact break-even, negotiate the switching-cost waivers, handle all documentation, and often secure a top-up facility at the new lower rate. Our average customer saves ₹4–8 lakh on a balance transfer — and pays nothing for the service.`,
+
 };
 
 export function getBlogContent(slug: string): string {
@@ -776,3 +915,62 @@ In this article, we cover the fundamentals, real-world examples specific to the 
 
 Ready to act on what you've learned? Use our AI eligibility checker or apply now for instant offers from India's leading banks.`;
 }
+
+/* ---------------- Service comparison matrix ---------------- */
+export interface CompareFeature {
+  feature: string;
+  // values keyed by loan-type id (home, personal, car, business, lap)
+  values: Record<string, string | boolean>;
+}
+
+export const compareLoanTypes = [
+  { id: "home", name: "Home Loan", icon: Home },
+  { id: "personal", name: "Personal Loan", icon: User },
+  { id: "car", name: "Car Loan", icon: CarFront },
+  { id: "business", name: "Business Loan", icon: Briefcase },
+  { id: "lap", name: "Loan Against Property", icon: Building2 },
+];
+
+export const compareFeatures: CompareFeature[] = [
+  {
+    feature: "Interest rate from",
+    values: { home: "8.35% p.a.", personal: "10.49% p.a.", car: "9.20% p.a.", business: "14.00% p.a.", lap: "9.50% p.a." },
+  },
+  {
+    feature: "Maximum amount",
+    values: { home: "₹15 Crore", personal: "₹40 Lakh", car: "₹1 Crore", business: "₹5 Crore", lap: "₹25 Crore" },
+  },
+  {
+    feature: "Tenure",
+    values: { home: "Up to 30 yrs", personal: "1–7 yrs", car: "Up to 8 yrs", business: "1–5 yrs", lap: "Up to 20 yrs" },
+  },
+  {
+    feature: "Collateral required",
+    values: { home: true, personal: false, car: true, business: false, lap: true },
+  },
+  {
+    feature: "Disbursal speed",
+    values: { home: "3–7 days", personal: "24 hours", car: "Same day", business: "48 hours", lap: "5–10 days" },
+  },
+  {
+    feature: "Tax benefit",
+    values: { home: "§80C + §24", personal: false, car: false, business: "Interest deductible", lap: "If business use" },
+  },
+  {
+    feature: "Prepayment charges",
+    values: { home: "Nil", personal: "Nil", car: "Nil", business: "2–4%", lap: "Nil" },
+  },
+  {
+    feature: "Balance transfer",
+    values: { home: true, personal: true, car: true, business: true, lap: true },
+  },
+  {
+    feature: "Top-up facility",
+    values: { home: true, personal: false, car: false, business: true, lap: true },
+  },
+  {
+    feature: "Doorstep service",
+    values: { home: true, personal: true, car: true, business: true, lap: true },
+  },
+];
+
