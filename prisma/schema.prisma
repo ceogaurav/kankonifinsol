@@ -24,12 +24,14 @@ model Lead {
   status      String   @default("new") // new | contacted | qualified | disbursed | rejected
   source      String   @default("website")
   assignedTo  String?
+  promoCode   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([status])
   @@index([service])
   @@index([createdAt])
+  @@index([promoCode])
 }
 
 model Callback {

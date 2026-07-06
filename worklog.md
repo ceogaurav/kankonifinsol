@@ -248,3 +248,69 @@ The Kankoni Finsol website was stable from round 2 with 14 sections + floating w
 - **Lead status update API**: Currently leads can only be created, not updated (status pipeline new→contacted→qualified→disbursed→rejected). Would need a PATCH endpoint guarded by admin key for the admin dashboard.
 - **Blog content expansion**: Only 2 of 6 blog posts have full long-form content; the other 4 use a generic placeholder. Could generate full content for all.
 - **Rate-limit persistence**: In-memory rate limiter resets on server restart; fine for now but could move to Redis for multi-instance.
+
+---
+Task ID: webDevReview-round-4
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, add Admin Dashboard (CRM) + Referral/Promo system + Lead status PATCH API + styling polish
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from round 3 with 16 sections + floating widgets, all verified working. QA this round confirmed: lint clean, dev server healthy (200 responses), all 16 sections present in DOM, no runtime errors. The site is production-ready and now enhanced with a full admin CRM and a referral/promo system for lead tracking and growth.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- agent-browser verified all sections render.
+- Dev log clean, no errors.
+
+### Backend changes
+
+1. **Schema update** (`prisma/schema.prisma`): Added `promoCode String?` field + `@@index([promoCode])` to the Lead model for referral/promo code tracking. Ran `bun run db:push` — DB synced.
+
+2. **Lead status PATCH API** (`src/app/api/leads/[id]/route.ts`): New admin-key-guarded PATCH endpoint that updates a lead's `status` (validated against allowlist: new | contacted | qualified | disbursed | rejected) and/or `assignedTo`. Returns `{ success, lead }`. Uses Next.js 16 async params pattern. Verified: PATCH /api/leads/[id]?key=kankoni-admin 200, SQL UPDATE confirmed, DB status changed ("Newsletter Subscriber" → "contacted").
+
+3. **Leads POST promo passthrough** (`src/app/api/leads/route.ts`): Updated to accept and persist `promoCode` (uppercased, truncated to 20 chars). Also added "newsletter" to the source allowlist.
+
+### New features added
+
+1. **Admin Dashboard** (`src/components/sections/admin-dashboard.tsx`): A full CRM dashboard section (`#admin`) with:
+   - **Secure login screen**: Lock icon, password input for admin key, demo key hint ("kankoni-admin"). Key stored in component state (not persisted).
+   - **KPI summary cards**: Total Leads, Last 7 Days (sum), Disbursed count, New/Pending count — with animated counters.
+   - **3 analytics charts** (recharts): 7-day leads trend line chart, by-source pie chart with legend, by-service top-8 bar chart with alternating royal/gold colors.
+   - **Leads table**: Searchable (name/phone/city/service/promo), status-filterable (all/new/contacted/qualified/disbursed/rejected), with avatar initials, contact details, source badge, promo code badge (gold), date, and inline status dropdown (color-coded per status) that PATCHes the API on change.
+   - **CSV export**: Downloads all filtered leads as a properly-escaped CSV file with 11 columns.
+   - **Refresh & Lock buttons**: Re-fetch data or log out.
+   - Animated row transitions (AnimatePresence + layout).
+   Verified end-to-end: login with "kankoni-admin" → dashboard loaded with 3 leads → KPIs showed (3, 3, 0, 0) → status dropdown update fired PATCH 200 → DB status confirmed changed → CSV export clicked → VLM-verified OK rendering.
+
+2. **Referral/Promo System** (`src/components/sections/referral-banner.tsx` + `quick-apply-modal.tsx` updates): A complete referral growth loop:
+   - **Referral banner section** (`#referral`): Royal-gradient banner with floating decorative shapes, benefits grid (0.10% rate discount, ₹2,000 cashback, unlimited referrals), a generated referral code (KANKONI-XXXXXX format, stored in localStorage for persistence), referral link with copy button, Share button (Web Share API with clipboard fallback), and regenerate-code button.
+   - **QuickApplyModal promo field**: Added a promo/referral code input (with Ticket icon, auto-uppercased). Auto-detects promo codes from URL params (`?ref=CODE` or `?promo=CODE`) on page load and pre-fills the field. Promo code is sent to /api/leads on submit.
+   Verified: referral code "KANKONI-DUFPGK" generated, link "http://localhost:3000/?ref=KANKONI-DUFPGK" copied; navigating to /?ref=KANKONI-TEST99 and opening quick-apply modal auto-filled promo field with "KANKONI-TEST99".
+
+### Styling polish
+- Admin: color-coded status badges (blue/amber/purple/green/red), KPI cards with icon tiles, sticky table header, animated row transitions, premium-scrollbar on table.
+- Referral: gold-accented code box with dashed border, floating blur shapes, glassmorphism benefit cards, gold copy/share buttons.
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- All 18 sections present in DOM (home, trust, services, process, eligibility, emi, emi-pro, compare, why-choose-us, about, insights, partners, reviews, resources, referral, contact, admin, footer).
+- Admin login → dashboard: 3 leads loaded, KPIs correct, charts render, VLM-verified OK.
+- Lead status PATCH: PATCH 200, DB status confirmed changed to "contacted".
+- CSV export: clicked, downloads filtered leads.
+- Referral code: generated "KANKONI-DUFPGK", link copied, localStorage persisted.
+- Promo auto-detect: /?ref=KANKONI-TEST99 → quick-apply modal auto-filled promo field.
+- Mobile (390×844): referral banner + admin login VLM-verified OK.
+- Dev.log: no errors.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Auth hardening**: Admin key is currently a simple env/constant check. Should implement NextAuth OTP login with role-based access (admin/employee/RM) and session management for production.
+- **Lead assignment**: The PATCH API supports `assignedTo` but the admin UI doesn't yet have an assignment UI (dropdown of employees). Could add an employee management feature.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is now very long (18 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Blog content expansion**: Only 2 of 6 blog posts have full long-form content.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart.
+- **Referral rewards tracking**: Currently promo codes are stored on leads but there's no dashboard view of "leads by referral code" or reward calculation. Could add a referral analytics view to the admin dashboard.
+- **Notifications**: Admin dashboard could use real-time notifications (WebSocket) for new leads instead of manual refresh.

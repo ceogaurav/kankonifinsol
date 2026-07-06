@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  X, Loader2, CheckCircle2, Send, Sparkles, ShieldCheck, Clock, Phone,
+  X, Loader2, CheckCircle2, Send, Sparkles, ShieldCheck, Clock, Phone, Ticket,
 } from "lucide-react";
 import { useQuickApply } from "@/lib/quick-apply-store";
 import { services, companyInfo } from "@/lib/site-data";
@@ -17,14 +17,27 @@ export function QuickApplyModal() {
   const [loading, setLoading] = React.useState(false);
   const [done, setDone] = React.useState(false);
   const [form, setForm] = React.useState({
-    name: "", phone: "", email: "", city: "", loanAmount: "",
+    name: "", phone: "", email: "", city: "", loanAmount: "", promoCode: "",
   });
+
+  // Auto-detect promo/referral code from URL (?ref=CODE or ?promo=CODE)
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref") || params.get("promo") || "";
+    if (ref) {
+      setForm((p) => ({ ...p, promoCode: ref.toUpperCase() }));
+    }
+  }, []);
 
   // reset when opened
   React.useEffect(() => {
     if (open) {
       setDone(false);
-      setForm({ name: "", phone: "", email: "", city: "", loanAmount: "" });
+      setForm((p) => ({
+        name: "", phone: "", email: "", city: "", loanAmount: "",
+        promoCode: p.promoCode, // preserve detected promo code
+      }));
     }
   }, [open, serviceName]);
 
@@ -55,7 +68,12 @@ export function QuickApplyModal() {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, service: serviceName, source: "quick-apply-modal" }),
+        body: JSON.stringify({
+          ...form,
+          service: serviceName,
+          source: "quick-apply-modal",
+          promoCode: form.promoCode || undefined,
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -173,6 +191,20 @@ export function QuickApplyModal() {
                   <div>
                     <Label className="text-xs font-medium text-muted-foreground">Desired Loan Amount</Label>
                     <Input value={form.loanAmount} onChange={(e) => update("loanAmount", e.target.value)} className="mt-1.5 h-11 rounded-xl bg-background/60" placeholder="₹25,00,000" />
+                  </div>
+
+                  {/* Promo / Referral code */}
+                  <div className="relative">
+                    <Label className="text-xs font-medium text-muted-foreground">Promo / Referral Code (optional)</Label>
+                    <div className="relative mt-1.5">
+                      <Ticket className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gold" />
+                      <Input
+                        value={form.promoCode}
+                        onChange={(e) => update("promoCode", e.target.value.toUpperCase())}
+                        className="h-11 rounded-xl bg-background/60 pl-10 uppercase placeholder:normal-case"
+                        placeholder="Enter code for extra benefits"
+                      />
+                    </div>
                   </div>
 
                   <Button

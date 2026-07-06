@@ -13,7 +13,9 @@ import { InsightsDashboard } from "@/components/sections/insights-dashboard";
 import { BankingPartners } from "@/components/sections/banking-partners";
 import { Reviews } from "@/components/sections/reviews";
 import { Resources } from "@/components/sections/resources";
+import { ReferralBanner } from "@/components/sections/referral-banner";
 import { Contact } from "@/components/sections/contact";
+import { AdminDashboard } from "@/components/sections/admin-dashboard";
 import { Footer } from "@/components/sections/footer";
 import { AIAssistant } from "@/components/sections/ai-assistant";
 import {
@@ -43,7 +45,9 @@ export default function Home() {
         <BankingPartners />
         <Reviews />
         <Resources />
+        <ReferralBanner />
         <Contact />
+        <AdminDashboard />
       </main>
       <Footer />
 
