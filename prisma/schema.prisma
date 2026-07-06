@@ -34,6 +34,18 @@ model Lead {
   @@index([promoCode])
 }
 
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  author    String   @default("System")
+  type      String   @default("note") // note | status_change | assignment
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([leadId])
+  @@index([createdAt])
+}
+
 model Callback {
   id        String   @id @default(cuid())
   name      String

@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Phone, Mail, MapPin, Calendar, User, Briefcase, Wallet,
   ShieldCheck, CreditCard, MessageSquare, Ticket, Clock, ChevronDown,
-  Check, Loader2, Sparkles,
+  Check, Loader2, Sparkles, Send, History, RefreshCw,
 } from "lucide-react";
 import { employees } from "@/lib/site-data";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export interface Lead {
@@ -44,6 +45,7 @@ interface LeadDrawerProps {
   lead: Lead | null;
   open: boolean;
   onClose: () => void;
+  adminKey: string;
   onUpdateStatus: (leadId: string, status: string) => Promise<void>;
   onUpdateAssignee: (leadId: string, assignee: string) => Promise<void>;
 }
@@ -77,8 +79,54 @@ function Field({
   );
 }
 
-export function LeadDrawer({ lead, open, onClose, onUpdateStatus, onUpdateAssignee }: LeadDrawerProps) {
+interface LeadNote {
+  id: string;
+  author: string;
+  type: string;
+  content: string;
+  createdAt: string;
+}
+
+const noteTypeConfig: Record<string, { icon: React.ComponentType<{ className?: string }>; color: string; label: string }> = {
+  note: { icon: MessageSquare, color: "bg-royal/10 text-royal", label: "Note" },
+  status_change: { icon: RefreshCw, color: "bg-amber-500/15 text-amber-400", label: "Status" },
+  assignment: { icon: User, color: "bg-purple-500/15 text-purple-400", label: "Assignment" },
+};
+
+export function LeadDrawer({ lead, open, onClose, adminKey, onUpdateStatus, onUpdateAssignee }: LeadDrawerProps) {
   const [updating, setUpdating] = React.useState(false);
+  const [notes, setNotes] = React.useState<LeadNote[]>([]);
+  const [notesLoading, setNotesLoading] = React.useState(false);
+  const [noteInput, setNoteInput] = React.useState("");
+  const [postingNote, setPostingNote] = React.useState(false);
+
+  // Fetch notes when drawer opens / lead changes
+  const fetchNotes = React.useCallback(async () => {
+    if (!lead || !adminKey) return;
+    setNotesLoading(true);
+    try {
+      const res = await fetch(`/api/leads/${lead.id}/notes?key=${encodeURIComponent(adminKey)}`);
+      const data = await res.json();
+      if (data.success) setNotes(data.notes || []);
+    } catch {
+      // ignore
+    } finally {
+      setNotesLoading(false);
+    }
+  }, [lead, adminKey]);
+
+  React.useEffect(() => {
+    if (open && lead) fetchNotes();
+    if (!open) { setNotes([]); setNoteInput(""); }
+  }, [open, lead, fetchNotes]);
+
+  // Refresh notes after a status/assignee update completes
+  React.useEffect(() => {
+    if (open && lead && !updating) {
+      const t = setTimeout(fetchNotes, 600);
+      return () => clearTimeout(t);
+    }
+  }, [updating, open, lead, fetchNotes]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -86,6 +134,31 @@ export function LeadDrawer({ lead, open, onClose, onUpdateStatus, onUpdateAssign
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
+
+  async function postNote(e: React.FormEvent) {
+    e.preventDefault();
+    if (!lead || !noteInput.trim()) return;
+    setPostingNote(true);
+    try {
+      const res = await fetch(`/api/leads/${lead.id}/notes?key=${encodeURIComponent(adminKey)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: noteInput.trim(), type: "note", author: "Admin" }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setNoteInput("");
+        fetchNotes();
+        toast.success("Note added");
+      } else {
+        toast.error(data.error || "Could not add note");
+      }
+    } catch {
+      toast.error("Network error");
+    } finally {
+      setPostingNote(false);
+    }
+  }
 
   async function handleStatus(newStatus: string) {
     if (!lead || newStatus === lead.status) return;
@@ -231,6 +304,62 @@ export function LeadDrawer({ lead, open, onClose, onUpdateStatus, onUpdateAssign
                   </div>
                 </div>
               )}
+
+              {/* Activity Log / Timeline */}
+              <div className="mt-5">
+                <div className="mb-2 flex items-center justify-between">
+                  <p className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                    <History className="h-3 w-3" /> Activity Log
+                  </p>
+                  {notesLoading && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
+                </div>
+
+                {/* Timeline */}
+                <div className="relative space-y-2.5 before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-px before:bg-border/60">
+                  {notes.length === 0 && !notesLoading && (
+                    <p className="py-3 text-center text-[11px] text-muted-foreground/60">No activity yet</p>
+                  )}
+                  {notes.map((n) => {
+                    const cfg = noteTypeConfig[n.type] || noteTypeConfig.note;
+                    return (
+                      <div key={n.id} className="relative flex gap-3">
+                        <span className={cn("z-10 mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full", cfg.color)}>
+                          <cfg.icon className="h-3.5 w-3.5" />
+                        </span>
+                        <div className="min-w-0 flex-1 rounded-lg border border-border/50 bg-background/40 p-2.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                              {cfg.label} · {n.author}
+                            </span>
+                            <span className="shrink-0 text-[10px] text-muted-foreground/60">
+                              {new Date(n.createdAt).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                          </div>
+                          <p className="mt-0.5 text-xs leading-relaxed text-foreground/90">{n.content}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Add note */}
+                <form onSubmit={postNote} className="mt-3 flex gap-2">
+                  <input
+                    value={noteInput}
+                    onChange={(e) => setNoteInput(e.target.value)}
+                    placeholder="Add a note…"
+                    className="flex-1 rounded-xl border border-border/70 bg-background/60 px-3 py-2 text-xs outline-none transition-colors focus:border-royal"
+                  />
+                  <button
+                    type="submit"
+                    disabled={postingNote || !noteInput.trim()}
+                    aria-label="Add note"
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-royal-gradient text-white transition-opacity disabled:opacity-40"
+                  >
+                    {postingNote ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                  </button>
+                </form>
+              </div>
             </div>
 
             {/* Footer */}

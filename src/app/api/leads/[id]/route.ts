@@ -56,10 +56,39 @@ export async function PATCH(
       return Response.json({ success: false, error: "No updatable fields provided." }, { status: 400 });
     }
 
+    // Fetch the current lead to know the "before" values for activity notes
+    const before = await db.lead.findUnique({ where: { id }, select: { status: true, assignedTo: true } });
+
     const lead = await db.lead.update({
       where: { id },
       data,
     });
+
+    // Auto-create activity notes for status/assignment changes
+    const notesToCreate: { leadId: string; author: string; type: string; content: string }[] = [];
+    if (data.status && before && before.status !== data.status) {
+      notesToCreate.push({
+        leadId: id,
+        author: "System",
+        type: "status_change",
+        content: `Status changed from "${before.status}" to "${data.status}"`,
+      });
+    }
+    if (data.assignedTo !== undefined && before) {
+      const oldA = before.assignedTo || "Unassigned";
+      const newA = data.assignedTo || "Unassigned";
+      if (oldA !== newA) {
+        notesToCreate.push({
+          leadId: id,
+          author: "System",
+          type: "assignment",
+          content: `Assignment changed from "${oldA}" to "${newA}"`,
+        });
+      }
+    }
+    if (notesToCreate.length > 0) {
+      await db.leadNote.createMany({ data: notesToCreate });
+    }
 
     return Response.json({ success: true, lead });
   } catch (err) {
