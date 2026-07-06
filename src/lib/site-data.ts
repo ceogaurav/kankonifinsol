@@ -651,3 +651,128 @@ export const footerLinks = {
     links: ["About Us", "Careers", "Contact", "Privacy Policy", "Terms of Service"],
   },
 };
+
+/* ---------------- Loan-type EMI presets ---------------- */
+export interface LoanPreset {
+  id: string;
+  name: string;
+  icon: LucideIcon;
+  rateMin: number;
+  rateMax: number;
+  rateDefault: number;
+  amountMin: number;
+  amountMax: number;
+  amountDefault: number;
+  tenureMin: number;
+  tenureMax: number;
+  tenureDefault: number;
+  accent: "royal" | "gold" | "navy";
+  blurb: string;
+}
+
+export const loanPresets: LoanPreset[] = [
+  {
+    id: "home",
+    name: "Home Loan",
+    icon: Home,
+    rateMin: 8, rateMax: 12, rateDefault: 8.35,
+    amountMin: 500000, amountMax: 50000000, amountDefault: 5000000,
+    tenureMin: 5, tenureMax: 30, tenureDefault: 20,
+    accent: "navy",
+    blurb: "Longest tenure, lowest rates. Fund your dream home.",
+  },
+  {
+    id: "personal",
+    name: "Personal Loan",
+    icon: User,
+    rateMin: 10, rateMax: 24, rateDefault: 10.49,
+    amountMin: 50000, amountMax: 4000000, amountDefault: 800000,
+    tenureMin: 1, tenureMax: 7, tenureDefault: 4,
+    accent: "royal",
+    blurb: "Unsecured, instant. Money for every milestone.",
+  },
+  {
+    id: "car",
+    name: "Car Loan",
+    icon: CarFront,
+    rateMin: 9, rateMax: 16, rateDefault: 9.2,
+    amountMin: 100000, amountMax: 2000000, amountDefault: 900000,
+    tenureMin: 1, tenureMax: 8, tenureDefault: 5,
+    accent: "gold",
+    blurb: "Drive home your new or used car today.",
+  },
+  {
+    id: "business",
+    name: "Business Loan",
+    icon: Briefcase,
+    rateMin: 11, rateMax: 22, rateDefault: 14,
+    amountMin: 500000, amountMax: 50000000, amountDefault: 1500000,
+    tenureMin: 1, tenureMax: 5, tenureDefault: 3,
+    accent: "royal",
+    blurb: "Fuel your enterprise with collateral-free capital.",
+  },
+  {
+    id: "lap",
+    name: "Loan Against Property",
+    icon: Building2,
+    rateMin: 9, rateMax: 14, rateDefault: 9.5,
+    amountMin: 1000000, amountMax: 250000000, amountDefault: 20000000,
+    tenureMin: 3, tenureMax: 20, tenureDefault: 12,
+    accent: "navy",
+    blurb: "High-value liquidity from your property.",
+  },
+];
+
+/* ---------------- Blog full content (for detail modal) ---------------- */
+export const blogContent: Record<string, string> = {
+  "home-loan-interest-rates-2025": `The RBI's repo rate decisions in 2025 continue to shape home loan pricing. With most major banks now linking their home loan rates to external benchmarks, your EMI moves in lockstep with policy rates.
+
+## What's happening with rates right now
+Home loan interest rates in 2025 start as low as 8.35% p.a. for salaried borrowers with CIBIL scores above 800. The spread between the card rate and the effective rate has narrowed, but most banks still offer 0.25–0.50% concessions during festive seasons or for women borrowers.
+
+## How to negotiate below the card rate
+1. **Leverage your CIBIL score** — A score above 800 gives you genuine negotiating power. Quote competing offers.
+2. **Compare 3+ lenders** — Banks match rates when they see a rival offer in writing.
+3. **Ask for processing-fee waivers** — Often easier to secure than a rate cut and saves ₹10,000–₹50,000 upfront.
+4. **Consider balance transfer** — If your current rate is 9.5%+, a transfer can save lakhs over the tenure.
+
+## The Kankoni advantage
+Because we aggregate volume across 100+ banks, we negotiate rates that individual borrowers rarely access. Our average customer saves 0.4% on their home loan rate — translating to ₹6–12 lakh on a ₹50 lakh, 20-year loan.`,
+  "cibil-score-750-guide": `Your CIBIL score is the single biggest factor in determining the interest rate you pay. Moving from 650 to 750 can reduce your borrowing cost by 1–2%, saving lakhs over a loan's life.
+
+## Why 750 matters
+Most prime lenders use 750 as the threshold for their best rates. Below 750, you're often shifted to a higher-risk bucket with steeper pricing.
+
+## Five steps to 750 in 90 days
+
+### 1. Reduce credit utilisation to under 30%
+If your credit card limit is ₹2 lakh, never carry a balance above ₹60,000 into the billing cycle. High utilisation signals over-dependence on credit.
+
+### 2. Never miss a due date — even by a day
+A single 30-day-late mark can drop your score by 50–80 points. Set auto-pay for at least the minimum due.
+
+### 3. Dispute errors on your report
+Pull your report from all four bureaus (CIBIL, Experian, Equifax, CRIF). Incorrect "written-off" or "settled" flags are common and devastating. Raise disputes immediately.
+
+### 4. Maintain a healthy credit mix
+A combination of one revolving account (credit card) and one instalment account (personal or auto loan) signals responsible usage.
+
+### 5. Don't close old accounts
+The age of your oldest credit line contributes to your score. Keep old cards active with small, occasional transactions.
+
+## The myth that holds people back
+Many believe checking their own score hurts it. It doesn't. Soft enquiries (your own checks) have zero impact. Only hard enquiries (lender checks when you apply) matter — and even those recover within 3–6 months.`,
+};
+
+export function getBlogContent(slug: string): string {
+  return blogContent[slug] || `This is a comprehensive guide brought to you by Kankoni Finsol's research desk. Our financial experts break down the essentials, share actionable strategies and help you make smarter money decisions.
+
+In this article, we cover the fundamentals, real-world examples specific to the Indian context, and practical steps you can take today. Whether you're a first-time borrower or a seasoned investor, the insights here are designed to save you money and time.
+
+**Key takeaways:**
+- Understand the core concepts and how they apply to your situation
+- Compare your options across 100+ banks with a single application
+- Speak to a dedicated relationship manager for personalised guidance
+
+Ready to act on what you've learned? Use our AI eligibility checker or apply now for instant offers from India's leading banks.`;
+}

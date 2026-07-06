@@ -7,7 +7,8 @@ import {
   Mail, Loader2, CheckCircle2, Sparkles, Send, TrendingUp,
 } from "lucide-react";
 import { SectionHeading, Reveal, staggerContainer, staggerItem } from "@/components/site/primitives";
-import { blogPosts, faqs } from "@/lib/site-data";
+import { blogPosts, faqs, type BlogPost } from "@/lib/site-data";
+import { BlogDetailModal, useBlogDetail } from "@/components/sections/blog-detail-modal";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
@@ -28,6 +29,7 @@ export function Resources() {
   const [openFaq, setOpenFaq] = React.useState<string>("item-0");
   const [query, setQuery] = React.useState("");
   const [activeCat, setActiveCat] = React.useState("All");
+  const blogDetail = useBlogDetail();
 
   // Newsletter state
   const [email, setEmail] = React.useState("");
@@ -140,7 +142,8 @@ export function Resources() {
                 initial="hidden"
                 animate="show"
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/50 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-royal/40 hover:shadow-premium"
+                onClick={() => blogDetail.openDetail(post)}
+                className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/50 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-royal/40 hover:shadow-premium"
               >
                 {/* visual header */}
                 <div className="relative h-36 overflow-hidden bg-royal-gradient">
@@ -295,6 +298,12 @@ export function Resources() {
           </Reveal>
         </div>
       </div>
+
+      <BlogDetailModal
+        post={blogDetail.post}
+        open={blogDetail.open}
+        onClose={blogDetail.close}
+      />
     </section>
   );
 }

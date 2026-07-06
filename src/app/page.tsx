@@ -5,9 +5,11 @@ import { Services } from "@/components/sections/services";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { EligibilityChecker } from "@/components/sections/eligibility-checker";
 import { EMICalculator } from "@/components/sections/emi-calculator";
+import { EMICalculatorPro } from "@/components/sections/emi-calculator-pro";
 import { CompareLoans } from "@/components/sections/compare-loans";
 import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import { About } from "@/components/sections/about";
+import { InsightsDashboard } from "@/components/sections/insights-dashboard";
 import { BankingPartners } from "@/components/sections/banking-partners";
 import { Reviews } from "@/components/sections/reviews";
 import { Resources } from "@/components/sections/resources";
@@ -33,9 +35,11 @@ export default function Home() {
         <HowItWorks />
         <EligibilityChecker />
         <EMICalculator />
+        <EMICalculatorPro />
         <CompareLoans />
         <WhyChooseUs />
         <About />
+        <InsightsDashboard />
         <BankingPartners />
         <Reviews />
         <Resources />

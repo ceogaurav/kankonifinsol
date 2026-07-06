@@ -180,3 +180,71 @@ The Kankoni Finsol website was stable from the previous round with 14 sections +
 - **Performance**: Page is very long (14 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
 - **Specialized EMI calculators**: Could add loan-type-specific EMI tabs (Home/Personal/Car) with preset rates and comparison.
 - **Rate-limit persistence**: In-memory rate limiter resets on server restart; fine for now but could move to Redis for multi-instance.
+
+---
+Task ID: webDevReview-round-3
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, add Specialised EMI Calculator (loan-type tabs) + Blog Detail Modal + Insights Dashboard + styling polish
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from round 2 with 14 sections + floating widgets, all verified working. QA this round confirmed: lint clean, dev server healthy (200 responses), all 14 sections present in DOM, no runtime errors. The site is production-ready and continues to be enhanced with deeper functionality and richer interactive tools.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- agent-browser verified all sections render.
+- Dev log clean, no errors.
+
+### New features added
+
+1. **Specialised EMI Calculator** (`src/components/sections/emi-calculator-pro.tsx`): A loan-type-aware EMI calculator with 5 tabs (Home Loan, Personal Loan, Car Loan, Business Loan, Loan Against Property). Each tab presets the appropriate rate/amount/tenure ranges and defaults (e.g. Home Loan: 8–12% rate, ₹5L–₹5Cr amount, 5–30yr tenure; Car Loan: 9–16%, ₹1L–₹20L, 1–8yr). Features:
+   - Live EMI / total interest / total payment cards.
+   - Pie chart (principal vs interest breakdown).
+   - **Outstanding balance area chart** showing loan balance declining over the full tenure (gradient fill).
+   - **Comparison strip** showing EMI across all 5 loan types at their defaults — clicking any switches the active tab.
+   - "Apply for [loan type]" button opens QuickApplyModal.
+   - Fixed x-axis label crowding with `interval="preserveStartEnd"` + `minTickGap={28}`.
+   Verified: Home Loan tab → EMI ₹42,918/mo (₹50L @8.35% 20yr ✓); Car Loan tab → ₹18,770/mo (₹9L @9.2% 5yr ✓); comparison strip LAP click switches tab correctly.
+
+2. **Blog Detail Modal** (`src/components/sections/blog-detail-modal.tsx`): A full-article reading modal triggered by clicking any blog card. Features:
+   - Custom lightweight markdown renderer (## headings, ### subheadings, **bold**, - / numbered lists, paragraphs) with proper typography.
+   - Article header with category badge, date, read time, author.
+   - Full article body with 2 real long-form articles (home-loan-interest-rates-2025, cibil-score-750-guide) + sensible defaults for the rest via `getBlogContent()`.
+   - Gold CTA box at bottom with "Apply Now" (chains to QuickApplyModal) + Share button (Web Share API with clipboard fallback).
+   - Escape-to-close, body scroll lock, backdrop click to close.
+   Verified: clicked first blog card → modal opened with full "Home Loan Interest Rates in 2025" article → VLM-confirmed OK rendering → scrolled to bottom CTA → VLM-confirmed OK.
+
+3. **Insights Dashboard** (`src/components/sections/insights-dashboard.tsx`): A transparency/growth section showcasing Kankoni's momentum. Features:
+   - 4 KPI cards with animated counters + delta badges (Loans Facilitated ₹312 Cr +28%, New Customers 8,420+ +34%, Active Banks 104+ +8, Avg Approval Rate 94% +3%).
+   - **Loans facilitated trend** area chart (quarterly, Q1'23→Q2'25, ₹ Cr) with dual-color gradient stroke and gradient fill.
+   - **Loan mix** horizontal bar chart (share by product category: Home 34%, Personal 22%, Business 18%, LAP 12%, Car 8%, Other 6%) with per-bar colors.
+   - Bottom note with live-updated indicator.
+   VLM-verified OK on desktop and mobile.
+
+4. **Extended site-data.ts**: Added `loanPresets` (5 loan-type presets with rate/amount/tenure ranges + defaults), `blogContent` (2 full long-form articles), and `getBlogContent()` helper.
+
+### Styling polish
+- EMI Pro: loan-type tabs with accent-aware active states (royal/gold/navy), preset info card, gradient-stroke area chart, color-coded comparison buttons.
+- Insights: KPI cards with hover glow + delta badges, dual-gradient trend chart, colored bar chart.
+- Blog modal: gradient header banner, accent bar, clean markdown typography, gold CTA box.
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- All 16 sections present in DOM (home, trust, services, process, eligibility, emi, emi-pro, compare, why-choose-us, about, insights, partners, reviews, resources, contact, footer).
+- EMI Pro tab switching verified: Home Loan ₹42,918/mo, Car Loan ₹18,770/mo (math correct).
+- EMI Pro comparison strip: clicking LAP switches active tab.
+- Blog detail modal: opens with full article content, VLM-verified OK (header + body + CTA), markdown renders correctly.
+- Insights dashboard: VLM-verified OK (KPIs + both charts render correctly).
+- Mobile (390×844): EMI Pro + Insights VLM-verified OK, no overflow/broken layout.
+- Dev.log: no errors.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Admin dashboard UI**: The leads stats API (`/api/leads/stats`) is ready but no admin UI consumes it yet. Priority: build an admin route/section with lead analytics charts (reusing the 7-day trend + source/service/status breakdowns), a leads table with status updates, and CSV export. Could use the same recharts patterns from InsightsDashboard.
+- **Auth**: NextAuth OTP login + role-based access still not implemented — needed before exposing admin UI.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is now very long (16 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Lead status update API**: Currently leads can only be created, not updated (status pipeline new→contacted→qualified→disbursed→rejected). Would need a PATCH endpoint guarded by admin key for the admin dashboard.
+- **Blog content expansion**: Only 2 of 6 blog posts have full long-form content; the other 4 use a generic placeholder. Could generate full content for all.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart; fine for now but could move to Redis for multi-instance.
