@@ -9,7 +9,7 @@ import {
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, MapPin, GripVertical, Loader2, Plus, X } from "lucide-react";
+import { Phone, MapPin, GripVertical, Loader2, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Lead {
@@ -39,9 +39,10 @@ interface KanbanBoardProps {
   leads: Lead[];
   adminKey: string;
   onUpdateStatus: (leadId: string, newStatus: string) => Promise<void>;
+  onOpenDrawer?: (lead: Lead) => void;
 }
 
-function LeadCard({ lead }: { lead: Lead }) {
+function LeadCard({ lead, onOpen }: { lead: Lead; onOpen?: (lead: Lead) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: lead.id,
   });
@@ -64,7 +65,19 @@ function LeadCard({ lead }: { lead: Lead }) {
           </span>
           <p className="truncate text-xs font-semibold">{lead.name}</p>
         </div>
-        <GripVertical className="h-3.5 w-3.5 shrink-0 text-muted-foreground/40 opacity-0 transition-opacity group-hover:opacity-100" />
+        <div className="flex items-center gap-1">
+          {onOpen && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onOpen(lead); }}
+              aria-label="View details"
+              className="grid h-6 w-6 place-items-center rounded-md text-muted-foreground/50 opacity-0 transition-opacity hover:bg-muted hover:text-royal group-hover:opacity-100"
+            >
+              <Info className="h-3.5 w-3.5" />
+            </button>
+          )}
+          <GripVertical className="h-3.5 w-3.5 shrink-0 text-muted-foreground/40 opacity-0 transition-opacity group-hover:opacity-100" />
+        </div>
       </div>
       <p className="mt-1.5 text-[11px] font-medium text-gold">{lead.service}</p>
       <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px] text-muted-foreground">
@@ -83,10 +96,12 @@ function Column({
   column,
   leads,
   isOver,
+  onOpen,
 }: {
   column: { id: string; label: string; accent: string; dot: string };
   leads: Lead[];
   isOver: boolean;
+  onOpen?: (lead: Lead) => void;
 }) {
   const { setNodeRef } = useDroppable({ id: column.id });
   return (
@@ -116,7 +131,7 @@ function Column({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
             >
-              <LeadCard lead={lead} />
+              <LeadCard lead={lead} onOpen={onOpen} />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -130,7 +145,7 @@ function Column({
   );
 }
 
-export function KanbanBoard({ leads, adminKey: _adminKey, onUpdateStatus }: KanbanBoardProps) {
+export function KanbanBoard({ leads, adminKey: _adminKey, onUpdateStatus, onOpenDrawer }: KanbanBoardProps) {
   const [activeId, setActiveId] = React.useState<string | null>(null);
   const [overCol, setOverCol] = React.useState<string | null>(null);
   const [updating, setUpdating] = React.useState(false);
@@ -202,6 +217,7 @@ export function KanbanBoard({ leads, adminKey: _adminKey, onUpdateStatus }: Kanb
               column={col}
               leads={leads.filter((l) => l.status === col.id)}
               isOver={overCol === col.id}
+              onOpen={onOpenDrawer}
             />
           ))}
         </div>

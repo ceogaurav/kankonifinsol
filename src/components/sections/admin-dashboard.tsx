@@ -16,6 +16,7 @@ import { SectionHeading, Reveal, AnimatedCounter } from "@/components/site/primi
 import { employees } from "@/lib/site-data";
 import { setAdminNotifEnabled } from "@/components/sections/admin-notifications";
 import { KanbanBoard } from "@/components/sections/kanban-board";
+import { LeadDrawer, useLeadDrawer } from "@/components/sections/lead-drawer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -76,6 +77,7 @@ export function AdminDashboard() {
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
   const [updatingId, setUpdatingId] = React.useState<string | null>(null);
   const [activeTab, setActiveTab] = React.useState<"leads" | "pipeline" | "referrals" | "team">("leads");
+  const leadDrawer = useLeadDrawer();
 
   function login(e: React.FormEvent) {
     e.preventDefault();
@@ -123,6 +125,7 @@ export function AdminDashboard() {
       const data = await res.json();
       if (data.success) {
         setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, status: newStatus } : l)));
+        if (leadDrawer.lead && leadDrawer.lead.id === leadId) leadDrawer.openDrawer({ ...leadDrawer.lead, status: newStatus });
       }
     } catch {
       // ignore
@@ -142,6 +145,7 @@ export function AdminDashboard() {
       const data = await res.json();
       if (data.success) {
         setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, assignedTo: assignee || null } : l)));
+        if (leadDrawer.lead && leadDrawer.lead.id === leadId) leadDrawer.openDrawer({ ...leadDrawer.lead, assignedTo: assignee || null });
       }
     } catch {
       // ignore
@@ -478,7 +482,7 @@ export function AdminDashboard() {
                   <Sparkles className="h-3 w-3" /> {leads.length} leads
                 </span>
               </div>
-              <KanbanBoard leads={leads} adminKey={key} onUpdateStatus={updateStatus} />
+              <KanbanBoard leads={leads} adminKey={key} onUpdateStatus={updateStatus} onOpenDrawer={leadDrawer.openDrawer} />
             </div>
           </Reveal>
         )}
@@ -542,7 +546,8 @@ export function AdminDashboard() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="border-b border-border/40 transition-colors hover:bg-accent/30"
+                        onClick={() => leadDrawer.openDrawer(lead)}
+                        className="cursor-pointer border-b border-border/40 transition-colors hover:bg-accent/30"
                       >
                         <td className="p-3">
                           <div className="flex items-center gap-2.5">
@@ -787,6 +792,14 @@ export function AdminDashboard() {
           </Reveal>
         )}
       </div>
+
+      <LeadDrawer
+        lead={leadDrawer.lead}
+        open={leadDrawer.open}
+        onClose={leadDrawer.close}
+        onUpdateStatus={updateStatus}
+        onUpdateAssignee={updateAssignee}
+      />
     </section>
   );
 }

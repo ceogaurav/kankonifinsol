@@ -30,6 +30,7 @@ export function Resources() {
   const [query, setQuery] = React.useState("");
   const [activeCat, setActiveCat] = React.useState("All");
   const [faqQuery, setFaqQuery] = React.useState("");
+  const [faqCat, setFaqCat] = React.useState("All");
   const blogDetail = useBlogDetail();
 
   // Newsletter state
@@ -52,16 +53,23 @@ export function Resources() {
 
   const filteredFaqs = React.useMemo(() => {
     const q = faqQuery.trim().toLowerCase();
-    if (!q) return faqs.map((f, idx) => ({ ...f, idx }));
     return faqs
       .map((f, idx) => ({ ...f, idx }))
-      .filter(
-        (f) =>
+      .filter((f) => {
+        const matchesCat = faqCat === "All" || f.category === faqCat;
+        const matchesQuery =
+          !q ||
           f.q.toLowerCase().includes(q) ||
           f.a.toLowerCase().includes(q) ||
-          f.category.toLowerCase().includes(q)
-      );
-  }, [faqQuery]);
+          f.category.toLowerCase().includes(q);
+        return matchesCat && matchesQuery;
+      });
+  }, [faqQuery, faqCat]);
+
+  const faqCategories = React.useMemo(() => {
+    const set = new Set(faqs.map((f) => f.category));
+    return ["All", ...Array.from(set)];
+  }, []);
 
   async function subscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -284,6 +292,23 @@ export function Resources() {
           </Reveal>
 
           <Reveal delay={0.1} className="lg:col-span-3">
+            {/* FAQ category filter */}
+            <div className="mb-3 flex flex-wrap gap-1.5">
+              {faqCategories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFaqCat(cat)}
+                  className={cn(
+                    "rounded-full border px-3 py-1 text-xs font-medium transition-all",
+                    faqCat === cat
+                      ? "border-royal bg-royal text-white"
+                      : "border-border/70 bg-card/40 text-muted-foreground hover:border-royal/40 hover:text-foreground"
+                  )}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
             {/* FAQ search */}
             <div className="relative mb-3">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

@@ -562,3 +562,66 @@ The Kankoni Finsol website was stable from round 7 with 19 sections + floating w
 - **WebSocket notifications**: Current notification system uses HTTP polling (every 20s); could upgrade to WebSocket/socket.io for true real-time push.
 - **Kanban enhancements**: Could add card click to open a lead detail drawer, bulk-select, and column WIP limits.
 - **FAQ expansion**: Could add more FAQs and category filtering to complement the search.
+
+---
+Task ID: webDevReview-round-9
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, add lead detail drawer + FAQ category filter + styling polish
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from round 8 with 19 sections + floating widgets, all verified working. QA this round confirmed: dev server healthy (200), lint clean, all 19 sections present, no runtime errors. The site is production-ready and now enhanced with a slide-in lead detail drawer and FAQ category filtering.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- Dev server confirmed healthy (200 responses, notification polling active).
+- agent-browser verified all 19 sections render.
+- Dev log clean, no errors.
+
+### New features added
+
+1. **Lead Detail Drawer** (`src/components/sections/lead-drawer.tsx`): A slide-in drawer (right side, max-w-md) that shows full lead information and allows inline editing. Features:
+   - Royal-gradient header with avatar initials + lead name + "Lead Detail" label + close button.
+   - Inline status dropdown (color-coded per status) and assigned-to dropdown — both PATCH the API on change and sync the drawer + table/Kanban state.
+   - Service, source (capitalized), and promo code badges.
+   - 8 field cards with icons: Phone, Email, City, Loan Amount, Employment, Income, Credit Score, Created date.
+   - Message section (if present).
+   - "Call Lead" footer button (tel: link).
+   - Spring-animated slide-in from right, backdrop blur, Escape-to-close.
+   - `useLeadDrawer()` hook for state management.
+   Triggered by: (a) clicking any table row in the Leads tab, (b) clicking the Info button on Kanban cards (appears on hover, separate from drag).
+   Verified: clicked table row → drawer opened showing "Instant Check" lead with all fields; changed status to "qualified" → PATCH 200 fired → SQL UPDATE confirmed; clicked Kanban card Info button → drawer opened with "Fresh Lead Test"; VLM-verified OK rendering.
+
+2. **FAQ Category Filter** (`src/components/sections/resources.tsx`): Added category filter chips above the FAQ search input, complementing the existing keyword search. Features:
+   - Chips auto-generated from FAQ categories (All, General, Eligibility, Process, Rates, Security).
+   - Active chip styled with royal gradient.
+   - Combined filtering: category AND keyword search work together.
+   Verified: "Eligibility" chip reduced FAQ items to 4; "All" resets; VLM-verified OK.
+
+### Wiring changes
+- **Admin dashboard**: Added `useLeadDrawer` hook, passed `onOpenDrawer` to KanbanBoard, made table rows clickable (cursor-pointer + onClick), rendered `<LeadDrawer>` at section end. Updated `updateStatus`/`updateAssignee` to sync drawer state when the drawer's lead is updated.
+- **KanbanBoard**: Added `onOpenDrawer` prop, added Info button to cards (stopPropagation to avoid drag conflict), passed `onOpen` through Column to LeadCard.
+
+### Styling polish
+- Drawer: royal-gradient header, glassmorphism field cards, color-coded status dropdown, spring slide-in animation, backdrop blur.
+- Kanban card: Info button fades in on hover (separate from grip handle).
+- FAQ filter chips: royal-gradient active state matching the blog category chips.
+
+### Verification results
+- `bun run lint` — clean, 0 errors (fixed 2 `no-unused-expressions` warnings by converting `&&` to `if`).
+- Page compiles, returns 200.
+- All 19 sections present in DOM.
+- Lead drawer: opens from table row click + Kanban card Info button; shows all lead fields; status/assignee changes PATCH 200 + sync state; VLM-verified OK.
+- FAQ category filter: "Eligibility" → 4 FAQs, "All" → reset; VLM-verified OK.
+- Dev.log: no errors, notification polling still active.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Auth hardening**: Admin key is still a simple constant check. Should implement NextAuth OTP login with role-based access (admin/employee/RM) and session management.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is now very long (19 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart.
+- **Lead assignment auto-routing**: Could auto-assign leads to employees based on loan type / city / round-robin rules.
+- **WebSocket notifications**: Current notification system uses HTTP polling (every 20s); could upgrade to WebSocket/socket.io for true real-time push.
+- **Lead edit**: The drawer currently edits status/assignee only; could add editing of name/phone/email/loan amount fields.
+- **Lead activity log**: Could track a history of status changes + notes per lead (timeline view in drawer).
