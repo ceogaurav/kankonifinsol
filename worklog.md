@@ -502,3 +502,63 @@ The Kankoni Finsol website was stable from round 6 with 19 sections + floating w
 - **WebSocket notifications**: Current notification system uses HTTP polling (every 20s); could upgrade to WebSocket/socket.io for true real-time push.
 - **Notification preferences**: Could add admin settings for notification frequency, sound alerts, email digest.
 - **Pipeline stage editing**: Could add drag-and-drop lead movement between pipeline stages (Kanban-style).
+
+---
+Task ID: webDevReview-round-8
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, add Kanban-style lead pipeline board + FAQ search + styling polish
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from round 7 with 19 sections + floating widgets, all verified working. QA this round confirmed: dev server healthy (200), lint clean, all 19 sections present, no runtime errors. The site is production-ready and now enhanced with a drag-and-drop Kanban pipeline board and FAQ search.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- Dev server confirmed healthy (200 responses, notification polling active).
+- agent-browser verified all 19 sections render.
+- Dev log clean, no errors.
+
+### New features added
+
+1. **Kanban-style Lead Pipeline Board** (`src/components/sections/kanban-board.tsx`): A drag-and-drop board using `@dnd-kit/core` that lets admins move leads between status columns by dragging. Features:
+   - 5 columns (New, Contacted, Qualified, Disbursed, Rejected) with color-coded top borders (blue/amber/purple/green/red) and live count badges.
+   - Draggable lead cards with avatar initials, name, service, phone, city, loan amount, promo code badge, and a grip handle on hover.
+   - Droppable columns with royal-tint highlight when a card is dragged over.
+   - Drag overlay (rotated, semi-transparent) following the cursor during drag.
+   - Animated card transitions (AnimatePresence + layout) when moving between columns.
+   - On drop, PATCHes the lead's status via the existing `/api/leads/[id]` endpoint.
+   - "Updating…" indicator during API calls.
+   - Horizontal scroll on mobile, empty-state "Drop leads here" per column.
+   Added as a new "Pipeline" tab in the admin dashboard (4th tab: Leads / Pipeline / Referrals / Team).
+   Verified: VLM-confirmed OK rendering with all 5 columns; leads correctly distributed (6 New, 1 Contacted); mobile (390×844) horizontally scrollable, VLM-verified OK.
+
+2. **FAQ Search** (`src/components/sections/resources.tsx`): Added a live search input above the FAQ accordion that filters FAQs by question, answer, or category. Features:
+   - Search icon + clear (X) button.
+   - Live filtering via `useMemo` (matches q/a/category, case-insensitive).
+   - Empty-state with "No FAQs match '...'" message + clear-search button.
+   - Preserves the accordion expand/collapse state via stable `item-${idx}` keys.
+   Verified: typing "cibil" filtered to matching FAQs; typing "documents" showed "What documents will I need?"; clear button works.
+
+### Styling polish
+- Kanban: color-coded column top borders, count badges, hover grip handles, drag overlay with rotate, royal-tint drop zones, animated card transitions.
+- FAQ search: search icon, clear button, dashed empty-state border.
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- All 19 sections present in DOM.
+- Kanban Pipeline tab: VLM-verified OK (5 columns, leads distributed 6/1/0/0/0), mobile OK.
+- FAQ search: "cibil" → filtered results, "documents" → "What documents will I need?", clear button works.
+- Admin now has 4 tabs (Leads / Pipeline / Referrals / Team).
+- Dev.log: no errors, notification polling still active.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Auth hardening**: Admin key is still a simple constant check. Should implement NextAuth OTP login with role-based access (admin/employee/RM) and session management.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is now very long (19 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart.
+- **Lead assignment auto-routing**: Could auto-assign leads to employees based on loan type / city / round-robin rules.
+- **WebSocket notifications**: Current notification system uses HTTP polling (every 20s); could upgrade to WebSocket/socket.io for true real-time push.
+- **Kanban enhancements**: Could add card click to open a lead detail drawer, bulk-select, and column WIP limits.
+- **FAQ expansion**: Could add more FAQs and category filtering to complement the search.

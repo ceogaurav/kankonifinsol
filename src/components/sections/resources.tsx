@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, Clock, Calendar, BookOpen, HelpCircle, Search,
-  Mail, Loader2, CheckCircle2, Sparkles, Send, TrendingUp,
+  Mail, Loader2, CheckCircle2, Sparkles, Send, TrendingUp, X,
 } from "lucide-react";
 import { SectionHeading, Reveal, staggerContainer, staggerItem } from "@/components/site/primitives";
 import { blogPosts, faqs, type BlogPost } from "@/lib/site-data";
@@ -29,6 +29,7 @@ export function Resources() {
   const [openFaq, setOpenFaq] = React.useState<string>("item-0");
   const [query, setQuery] = React.useState("");
   const [activeCat, setActiveCat] = React.useState("All");
+  const [faqQuery, setFaqQuery] = React.useState("");
   const blogDetail = useBlogDetail();
 
   // Newsletter state
@@ -48,6 +49,19 @@ export function Resources() {
       return matchesCat && matchesQuery;
     });
   }, [query, activeCat]);
+
+  const filteredFaqs = React.useMemo(() => {
+    const q = faqQuery.trim().toLowerCase();
+    if (!q) return faqs.map((f, idx) => ({ ...f, idx }));
+    return faqs
+      .map((f, idx) => ({ ...f, idx }))
+      .filter(
+        (f) =>
+          f.q.toLowerCase().includes(q) ||
+          f.a.toLowerCase().includes(q) ||
+          f.category.toLowerCase().includes(q)
+      );
+  }, [faqQuery]);
 
   async function subscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -270,6 +284,25 @@ export function Resources() {
           </Reveal>
 
           <Reveal delay={0.1} className="lg:col-span-3">
+            {/* FAQ search */}
+            <div className="relative mb-3">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={faqQuery}
+                onChange={(e) => setFaqQuery(e.target.value)}
+                placeholder="Search FAQs…"
+                className="h-10 rounded-xl border-border/70 bg-card/50 pl-10"
+              />
+              {faqQuery && (
+                <button
+                  onClick={() => setFaqQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-2 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
             <Accordion
               type="single"
               collapsible
@@ -277,10 +310,11 @@ export function Resources() {
               onValueChange={setOpenFaq}
               className="space-y-3"
             >
-              {faqs.map((faq, i) => (
+              {filteredFaqs.length > 0 ? (
+                filteredFaqs.map((faq) => (
                 <AccordionItem
-                  key={i}
-                  value={`item-${i}`}
+                  key={faq.idx}
+                  value={`item-${faq.idx}`}
                   className="overflow-hidden rounded-2xl border border-border/60 bg-card/40 px-5 backdrop-blur transition-colors data-[state=open]:border-royal/40"
                 >
                   <AccordionTrigger className="items-start py-4 text-left hover:no-underline [&>svg]:mt-1">
@@ -293,7 +327,14 @@ export function Resources() {
                     {faq.a}
                   </AccordionContent>
                 </AccordionItem>
-              ))}
+                ))
+              ) : (
+                <div className="grid place-items-center rounded-2xl border border-dashed border-border/60 bg-card/30 py-10 text-center">
+                  <Search className="h-7 w-7 text-muted-foreground/40" />
+                  <p className="mt-2 text-sm text-muted-foreground">No FAQs match “{faqQuery}”.</p>
+                  <button onClick={() => setFaqQuery("")} className="mt-2 text-xs font-semibold text-royal hover:underline">Clear search</button>
+                </div>
+              )}
             </Accordion>
           </Reveal>
         </div>

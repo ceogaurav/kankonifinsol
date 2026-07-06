@@ -15,6 +15,7 @@ import {
 import { SectionHeading, Reveal, AnimatedCounter } from "@/components/site/primitives";
 import { employees } from "@/lib/site-data";
 import { setAdminNotifEnabled } from "@/components/sections/admin-notifications";
+import { KanbanBoard } from "@/components/sections/kanban-board";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -74,7 +75,7 @@ export function AdminDashboard() {
   const [search, setSearch] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
   const [updatingId, setUpdatingId] = React.useState<string | null>(null);
-  const [activeTab, setActiveTab] = React.useState<"leads" | "referrals" | "team">("leads");
+  const [activeTab, setActiveTab] = React.useState<"leads" | "pipeline" | "referrals" | "team">("leads");
 
   function login(e: React.FormEvent) {
     e.preventDefault();
@@ -443,6 +444,7 @@ export function AdminDashboard() {
         <div className="mt-6 flex gap-2">
           {[
             { id: "leads", label: "Leads", icon: ListChecks },
+            { id: "pipeline", label: "Pipeline", icon: BarChart3 },
             { id: "referrals", label: "Referrals", icon: Gift },
             { id: "team", label: "Team", icon: UserCog },
           ].map((t) => (
@@ -460,6 +462,26 @@ export function AdminDashboard() {
             </button>
           ))}
         </div>
+
+        {/* Pipeline (Kanban) tab */}
+        {activeTab === "pipeline" && (
+          <Reveal delay={0.1}>
+            <div className="mt-4 rounded-2xl border border-border/60 bg-card/40 p-4 backdrop-blur sm:p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h3 className="flex items-center gap-2 font-display text-lg font-semibold">
+                    <BarChart3 className="h-5 w-5 text-royal" /> Lead Pipeline Board
+                  </h3>
+                  <p className="text-xs text-muted-foreground">Drag &amp; drop leads between status columns</p>
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-royal/10 px-3 py-1 text-[11px] font-medium text-royal">
+                  <Sparkles className="h-3 w-3" /> {leads.length} leads
+                </span>
+              </div>
+              <KanbanBoard leads={leads} adminKey={key} onUpdateStatus={updateStatus} />
+            </div>
+          </Reveal>
+        )}
 
         {/* Leads table */}
         {activeTab === "leads" && (
