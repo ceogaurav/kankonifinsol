@@ -378,3 +378,63 @@ The Kankoni Finsol website was stable from round 4 with 18 sections + floating w
 - **Referral rewards tracking**: Promo codes are stored on leads but there's no admin dashboard view of "leads by referral code" or reward calculation.
 - **Notifications**: Admin dashboard could use real-time notifications (WebSocket) for new leads.
 - **A/B testing**: Multiple Apply entry points now tag sources (quick-apply-modal, eligibility-result, compare-matrix, contact-form, exit-intent) — could build a source-conversion funnel view in the admin dashboard.
+
+---
+Task ID: webDevReview-round-6
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, add admin lead assignment UI + referral analytics + team management + fix stats API nullable-field bug
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from round 5 with 19 sections + floating widgets, all verified working. QA this round confirmed: lint clean, all 19 sections present. During feature development, a Prisma nullable-field filtering bug was discovered in the stats API (`NOT: { field: null }` is invalid for SQLite) and fixed. The site remains production-ready with a significantly enhanced admin CRM.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- agent-browser verified all 19 sections render.
+- Found + fixed a runtime bug in `/api/leads/stats` (see below).
+
+### Bug fix (critical)
+- **Stats API nullable-field filter** (`src/app/api/leads/stats/route.ts`): The round-4 addition of `byPromo`/`byAssignee` queries used `where: { NOT: { promoCode: null } }` and `where: { NOT: { assignedTo: null } }`, which are invalid Prisma syntax for SQLite nullable fields — causing a `PrismaClientValidationError` and 500 responses (which crashed the dev server). Fixed by replacing the two filtered `findMany` queries with a single `findMany` (selecting promoCode/assignedTo/status/service for all leads) and aggregating in JavaScript with `if (!l.promoCode) continue` guards. Verified: GET /api/leads/stats?key=kankoni-admin now returns 200 with `byPromoCode` and `byAssignee` arrays correctly populated.
+
+### New features added
+
+1. **Admin Dashboard — Tabbed CRM** (`src/components/sections/admin-dashboard.tsx`): Restructured the dashboard into 3 tabs (Leads / Referrals / Team) with icon-tab navigation:
+   - **Leads tab**: Existing leads table + new "Assigned To" column with an inline employee dropdown (PATCHes `assignedTo` on change). Search/filter/status-dropdown all preserved.
+   - **Referrals tab**: Referral program analytics — 4 summary cards (Unique Codes, Referral Leads, Disbursed, Conv. Rate with animated counters), a promo-codes table (code, leads, disbursed, services touched, conv. rate badge, estimated reward ₹), and an empty-state when no referral leads exist.
+   - **Team tab**: Lead assignment performance bar chart (assigned vs disbursed per employee, recharts) + 6 employee cards with avatar, name, role, email, phone, and per-employee stats (Assigned / Disbursed / Conv.%).
+
+2. **Lead Assignment UI**: Each lead row now has an inline `<select>` dropdown listing 6 employees (Rajesh, Anjali, Vikram, Sneha, Amit, Priya) + "Unassigned". Changing it PATCHes `/api/leads/[id]` with `{ assignedTo }`. Verified: assigned "Newsletter Subscriber" to "Rajesh Kankoni" → PATCH 200 → DB confirmed `assignedTo: "Rajesh Kankoni"` → Team tab shows Assigned:1 for Rajesh.
+
+3. **Employee data** (`src/lib/site-data.ts`): Added `employees` array (6 staff with id/name/role/email/phone/avatar) + `Employee` interface, used by the Team tab and assignment dropdown.
+
+4. **Stats API aggregation** (`src/app/api/leads/stats/route.ts`): Now returns `byPromoCode` (code, count, disbursed, services) and `byAssignee` (name, count, disbursed, contacted) arrays, computed via JS aggregation over a single findMany.
+
+### Styling polish
+- Tab bar with icon + label, active state (royal gradient + glow).
+- Assignment dropdown: compact rounded-full select with chevron.
+- Referral summary cards with icon tiles + animated counters.
+- Promo code table with gold code badges, green disbursed counts, color-coded conv-rate pills.
+- Team employee cards with royal-gradient avatars, 3-column stat grid, hover lift + glow.
+- Assignment performance bar chart with legend.
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- All 19 sections present in DOM.
+- Stats API: GET 200, returns byPromoCode + byAssignee correctly.
+- Lead assignment: PATCH 200, DB confirmed ("Rajesh Kankoni"), Team tab reflects Assigned:1.
+- Admin Leads tab: VLM-verified OK (with new Assigned To column).
+- Admin Referrals tab: VLM-verified OK (summary cards + table).
+- Admin Team tab: VLM-verified OK (employee cards with stats).
+- Dev.log: no errors after fix.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Dev server crash recovery**: The stats API 500 error crashed the dev server; it did not auto-restart and had to be manually relaunched. The system's auto-restart mechanism should be verified. Consider adding error boundaries or a process supervisor.
+- **Auth hardening**: Admin key is still a simple constant check. Should implement NextAuth OTP login with role-based access (admin/employee/RM) and session management.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is now very long (19 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart.
+- **Notifications**: Admin dashboard could use real-time notifications (WebSocket) for new leads instead of manual refresh.
+- **Source-conversion funnel**: Multiple Apply entry points now tag sources (quick-apply-modal, eligibility-result, compare-matrix, contact-form, exit-intent) — could build a source-conversion funnel view in the admin dashboard.
+- **Lead assignment auto-routing**: Could auto-assign leads to employees based on loan type / city / round-robin rules.

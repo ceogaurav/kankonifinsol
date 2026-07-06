@@ -12,17 +12,50 @@ export async function GET(req: Request) {
       return Response.json({ success: false, error: "Unauthorized." }, { status: 401 });
     }
 
-    const [total, byStatus, bySource, byService, last7] = await Promise.all([
+    const [total, byStatus, bySource, byService, allForAgg, last7] = await Promise.all([
       db.lead.count(),
       db.lead.groupBy({ by: ["status"], _count: { _all: true } }),
       db.lead.groupBy({ by: ["source"], _count: { _all: true } }),
       db.lead.groupBy({ by: ["service"], _count: { _all: true } }),
+      db.lead.findMany({
+        select: { promoCode: true, assignedTo: true, status: true, service: true },
+      }),
       db.lead.findMany({
         where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } },
         select: { createdAt: true, service: true, status: true, source: true },
         orderBy: { createdAt: "asc" },
       }),
     ]);
+
+    // Aggregate promo codes (filter in JS for nullable-field compatibility)
+    const promoMap = new Map<string, { count: number; disbursed: number; services: Set<string> }>();
+    for (const l of allForAgg) {
+      if (!l.promoCode) continue;
+      const code = l.promoCode;
+      if (!promoMap.has(code)) promoMap.set(code, { count: 0, disbursed: 0, services: new Set() });
+      const entry = promoMap.get(code)!;
+      entry.count++;
+      if (l.status === "disbursed") entry.disbursed++;
+      entry.services.add(l.service);
+    }
+    const byPromoCode = Array.from(promoMap.entries())
+      .map(([code, v]) => ({ code, count: v.count, disbursed: v.disbursed, services: v.services.size }))
+      .sort((a, b) => b.count - a.count);
+
+    // Aggregate assignees
+    const assigneeMap = new Map<string, { count: number; disbursed: number; contacted: number }>();
+    for (const l of allForAgg) {
+      if (!l.assignedTo) continue;
+      const name = l.assignedTo;
+      if (!assigneeMap.has(name)) assigneeMap.set(name, { count: 0, disbursed: 0, contacted: 0 });
+      const entry = assigneeMap.get(name)!;
+      entry.count++;
+      if (l.status === "disbursed") entry.disbursed++;
+      if (l.status === "contacted" || l.status === "qualified") entry.contacted++;
+    }
+    const byAssigneeAgg = Array.from(assigneeMap.entries())
+      .map(([name, v]) => ({ name, ...v }))
+      .sort((a, b) => b.count - a.count);
 
     // bucket last 7 days
     const days: { date: string; count: number }[] = [];
@@ -50,6 +83,8 @@ export async function GET(req: Request) {
         .map((s) => ({ service: s.service, count: s._count._all }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 8),
+      byPromoCode,
+      byAssignee: byAssigneeAgg,
       last7Days: days,
     });
   } catch (err) {

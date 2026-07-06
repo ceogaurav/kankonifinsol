@@ -974,3 +974,23 @@ export const compareFeatures: CompareFeature[] = [
   },
 ];
 
+/* ---------------- Employees (for admin lead assignment) ---------------- */
+export interface Employee {
+  id: string;
+  name: string;
+  role: string;
+  email: string;
+  phone: string;
+  avatar: string;
+}
+
+export const employees: Employee[] = [
+  { id: "emp1", name: "Rajesh Kankoni", role: "Senior RM", email: "rajesh@kankonifinsol.com", phone: "+91 90001 10001", avatar: "RK" },
+  { id: "emp2", name: "Anjali Mehta", role: "Lending Head", email: "anjali@kankonifinsol.com", phone: "+91 90001 10002", avatar: "AM" },
+  { id: "emp3", name: "Vikram Shah", role: "Credit Specialist", email: "vikram@kankonifinsol.com", phone: "+91 90001 10003", avatar: "VS" },
+  { id: "emp4", name: "Sneha Reddy", role: "Wealth Advisor", email: "sneha@kankonifinsol.com", phone: "+91 90001 10004", avatar: "SR" },
+  { id: "emp5", name: "Amit Patel", role: "MSME RM", email: "amit@kankonifinsol.com", phone: "+91 90001 10005", avatar: "AP" },
+  { id: "emp6", name: "Priya Iyer", role: "Home Loan RM", email: "priya@kankonifinsol.com", phone: "+91 90001 10006", avatar: "PI" },
+];
+
+

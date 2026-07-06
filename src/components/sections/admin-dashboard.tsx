@@ -10,8 +10,10 @@ import {
   Lock, Loader2, Download, RefreshCw, TrendingUp, Users, Mail,
   Phone, MapPin, Calendar, Filter, Search, ChevronDown, Database,
   ShieldCheck, ArrowRight, Sparkles, X, Check, AlertCircle,
+  UserCog, Gift, PieChart as PieIcon, BarChart3, ListChecks, Trophy,
 } from "lucide-react";
 import { SectionHeading, Reveal, AnimatedCounter } from "@/components/site/primitives";
+import { employees } from "@/lib/site-data";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -50,6 +52,8 @@ interface Stats {
   byStatus: { status: string; count: number }[];
   bySource: { source: string; count: number }[];
   byService: { service: string; count: number }[];
+  byPromoCode?: { code: string; count: number; disbursed: number; services: number }[];
+  byAssignee?: { name: string; count: number; disbursed: number; contacted: number }[];
   last7Days: { date: string; count: number }[];
 }
 
@@ -69,6 +73,7 @@ export function AdminDashboard() {
   const [search, setSearch] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState<string>("all");
   const [updatingId, setUpdatingId] = React.useState<string | null>(null);
+  const [activeTab, setActiveTab] = React.useState<"leads" | "referrals" | "team">("leads");
 
   function login(e: React.FormEvent) {
     e.preventDefault();
@@ -115,6 +120,25 @@ export function AdminDashboard() {
       const data = await res.json();
       if (data.success) {
         setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, status: newStatus } : l)));
+      }
+    } catch {
+      // ignore
+    } finally {
+      setUpdatingId(null);
+    }
+  }
+
+  async function updateAssignee(leadId: string, assignee: string) {
+    setUpdatingId(leadId);
+    try {
+      const res = await fetch(`/api/leads/${leadId}?key=${encodeURIComponent(key)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignedTo: assignee || null }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, assignedTo: assignee || null } : l)));
       }
     } catch {
       // ignore
@@ -310,9 +334,32 @@ export function AdminDashboard() {
           </div>
         )}
 
+        {/* Tabs */}
+        <div className="mt-6 flex gap-2">
+          {[
+            { id: "leads", label: "Leads", icon: ListChecks },
+            { id: "referrals", label: "Referrals", icon: Gift },
+            { id: "team", label: "Team", icon: UserCog },
+          ].map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setActiveTab(t.id as typeof activeTab)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all",
+                activeTab === t.id
+                  ? "border-royal bg-royal text-white shadow-royal-glow"
+                  : "border-border/70 bg-card/40 text-muted-foreground hover:border-royal/40 hover:text-foreground"
+              )}
+            >
+              <t.icon className="h-4 w-4" /> {t.label}
+            </button>
+          ))}
+        </div>
+
         {/* Leads table */}
+        {activeTab === "leads" && (
         <Reveal delay={0.1}>
-          <div className="mt-6 rounded-2xl border border-border/60 bg-card/50 backdrop-blur">
+          <div className="mt-4 rounded-2xl border border-border/60 bg-card/50 backdrop-blur">
             {/* Toolbar */}
             <div className="flex flex-col gap-3 border-b border-border/50 p-4 sm:flex-row sm:items-center">
               <div className="relative flex-1">
@@ -354,6 +401,7 @@ export function AdminDashboard() {
                     <th className="p-3 font-semibold">Service</th>
                     <th className="p-3 font-semibold">Source</th>
                     <th className="p-3 font-semibold">Promo</th>
+                    <th className="p-3 font-semibold">Assigned To</th>
                     <th className="p-3 font-semibold">Date</th>
                     <th className="p-3 font-semibold">Status</th>
                   </tr>
@@ -397,6 +445,22 @@ export function AdminDashboard() {
                             <span className="text-muted-foreground/40">—</span>
                           )}
                         </td>
+                        <td className="p-3">
+                          <div className="relative inline-block">
+                            <select
+                              value={lead.assignedTo || ""}
+                              disabled={updatingId === lead.id}
+                              onChange={(e) => updateAssignee(lead.id, e.target.value)}
+                              className="cursor-pointer appearance-none rounded-full border border-border/60 bg-background/50 py-1 pl-2.5 pr-6 text-[10px] font-medium outline-none transition-colors disabled:opacity-50 hover:border-royal/40"
+                            >
+                              <option value="" className="bg-card text-foreground">Unassigned</option>
+                              {employees.map((emp) => (
+                                <option key={emp.id} value={emp.name} className="bg-card text-foreground">{emp.name.split(" ")[0]}</option>
+                              ))}
+                            </select>
+                            <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 h-2.5 w-2.5 -translate-y-1/2 opacity-60" />
+                          </div>
+                        </td>
                         <td className="p-3 text-[11px] text-muted-foreground whitespace-nowrap">{formatDate(lead.createdAt)}</td>
                         <td className="p-3">
                           <div className="relative inline-block">
@@ -434,6 +498,167 @@ export function AdminDashboard() {
             </div>
           </div>
         </Reveal>
+        )}
+
+        {/* Referrals tab */}
+        {activeTab === "referrals" && (
+          <Reveal delay={0.1}>
+            <div className="mt-4 rounded-2xl border border-border/60 bg-card/50 p-5 backdrop-blur sm:p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="flex items-center gap-2 font-display text-lg font-semibold">
+                    <Gift className="h-5 w-5 text-gold" /> Referral Program Analytics
+                  </h3>
+                  <p className="text-xs text-muted-foreground">Leads acquired through promo/referral codes</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-display text-2xl font-bold text-gradient-gold">
+                    <AnimatedCounter value={stats?.byPromoCode?.reduce((a, b) => a + b.count, 0) ?? 0} duration={1.5} />
+                  </p>
+                  <p className="text-xs text-muted-foreground">Total referral leads</p>
+                </div>
+              </div>
+
+              {/* Summary cards */}
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {[
+                  { label: "Unique Codes", value: stats?.byPromoCode?.length ?? 0, icon: Gift, color: "text-gold" },
+                  { label: "Referral Leads", value: stats?.byPromoCode?.reduce((a, b) => a + b.count, 0) ?? 0, icon: TrendingUp, color: "text-royal" },
+                  { label: "Disbursed", value: stats?.byPromoCode?.reduce((a, b) => a + b.disbursed, 0) ?? 0, icon: Check, color: "text-green-400" },
+                  { label: "Conv. Rate", value: (() => { const t = stats?.byPromoCode?.reduce((a, b) => a + b.count, 0) ?? 0; const d = stats?.byPromoCode?.reduce((a, b) => a + b.disbursed, 0) ?? 0; return t > 0 ? Math.round((d / t) * 100) : 0; })(), suffix: "%", icon: Trophy, color: "text-royal" },
+                ].map((c) => (
+                  <div key={c.label} className="rounded-xl border border-border/50 bg-background/40 p-3 text-center">
+                    <c.icon className={cn("mx-auto h-4 w-4", c.color)} />
+                    <p className="mt-1 font-display text-lg font-bold">
+                      <AnimatedCounter value={c.value} suffix={c.suffix} duration={1.2} />
+                    </p>
+                    <p className="text-[10px] text-muted-foreground">{c.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Promo codes table */}
+              <div className="mt-5 overflow-x-auto premium-scrollbar">
+                <table className="w-full min-w-[560px] text-sm">
+                  <thead>
+                    <tr className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                      <th className="p-3 font-semibold">Promo Code</th>
+                      <th className="p-3 font-semibold text-center">Leads</th>
+                      <th className="p-3 font-semibold text-center">Disbursed</th>
+                      <th className="p-3 font-semibold text-center">Services</th>
+                      <th className="p-3 font-semibold text-center">Conv. Rate</th>
+                      <th className="p-3 font-semibold text-right">Est. Reward</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(stats?.byPromoCode?.length ?? 0) > 0 ? (
+                      stats?.byPromoCode.map((p) => {
+                        const conv = p.count > 0 ? Math.round((p.disbursed / p.count) * 100) : 0;
+                        const reward = p.disbursed * 2000;
+                        return (
+                          <tr key={p.code} className="border-b border-border/40 transition-colors hover:bg-accent/30">
+                            <td className="p-3">
+                              <span className="rounded-full bg-gold/15 px-2.5 py-1 font-mono text-xs font-bold text-gold">{p.code}</span>
+                            </td>
+                            <td className="p-3 text-center font-semibold">{p.count}</td>
+                            <td className="p-3 text-center text-green-400 font-semibold">{p.disbursed}</td>
+                            <td className="p-3 text-center text-muted-foreground">{p.services}</td>
+                            <td className="p-3 text-center">
+                              <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold", conv >= 50 ? "bg-green-500/15 text-green-400" : conv >= 25 ? "bg-amber-500/15 text-amber-400" : "bg-muted text-muted-foreground")}>
+                                {conv}%
+                              </span>
+                            </td>
+                            <td className="p-3 text-right font-semibold text-gold">₹{reward.toLocaleString("en-IN")}</td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center text-sm text-muted-foreground">
+                          <Gift className="mx-auto h-8 w-8 text-muted-foreground/40" />
+                          <p className="mt-2">No referral leads yet. Share your referral link to get started!</p>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3 text-[11px] text-muted-foreground">
+                * Reward estimate = disbursed leads × ₹2,000 cashback. Actual payouts per referral program terms.
+              </p>
+            </div>
+          </Reveal>
+        )}
+
+        {/* Team tab */}
+        {activeTab === "team" && (
+          <Reveal delay={0.1}>
+            <div className="mt-4 space-y-4">
+              {/* Assignee performance */}
+              {(stats?.byAssignee && stats.byAssignee.length > 0) && (
+                <div className="rounded-2xl border border-border/60 bg-card/50 p-5 backdrop-blur sm:p-6">
+                  <h3 className="flex items-center gap-2 font-display text-lg font-semibold">
+                    <BarChart3 className="h-5 w-5 text-royal" /> Lead Assignment Performance
+                  </h3>
+                  <div className="mt-4 h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={stats.byAssignee} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} vertical={false} />
+                        <XAxis dataKey="name" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} interval={0} angle={-15} textAnchor="end" height={50} tickFormatter={(v) => v.split(" ")[0]} />
+                        <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} width={32} />
+                        <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12 }} cursor={{ fill: "var(--muted)", opacity: 0.3 }} />
+                        <Legend wrapperStyle={{ fontSize: 11 }} />
+                        <Bar dataKey="count" name="Assigned" fill="oklch(0.42 0.2 264)" radius={[6, 6, 0, 0]} barSize={28} />
+                        <Bar dataKey="disbursed" name="Disbursed" fill="oklch(0.78 0.15 84)" radius={[6, 6, 0, 0]} barSize={28} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              )}
+
+              {/* Employee cards */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {employees.map((emp) => {
+                  const agg = stats?.byAssignee?.find((a) => a.name === emp.name);
+                  const assignedCount = agg?.count ?? 0;
+                  const disbursed = agg?.disbursed ?? 0;
+                  const convRate = assignedCount > 0 ? Math.round((disbursed / assignedCount) * 100) : 0;
+                  return (
+                    <div key={emp.id} className="rounded-2xl border border-border/60 bg-card/50 p-5 backdrop-blur transition-all hover:border-royal/40 hover:shadow-premium">
+                      <div className="flex items-center gap-3">
+                        <span className="grid h-12 w-12 place-items-center rounded-xl bg-royal-gradient font-display text-sm font-bold text-white">
+                          {emp.avatar}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate font-semibold">{emp.name}</p>
+                          <p className="text-xs font-medium text-gold">{emp.role}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                        <p className="flex items-center gap-1.5"><Mail className="h-3 w-3" /> {emp.email}</p>
+                        <p className="flex items-center gap-1.5"><Phone className="h-3 w-3" /> {emp.phone}</p>
+                      </div>
+                      <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border/50 pt-3 text-center">
+                        <div>
+                          <p className="font-display text-base font-bold">{assignedCount}</p>
+                          <p className="text-[10px] text-muted-foreground">Assigned</p>
+                        </div>
+                        <div className="border-x border-border/50">
+                          <p className="font-display text-base font-bold text-green-400">{disbursed}</p>
+                          <p className="text-[10px] text-muted-foreground">Disbursed</p>
+                        </div>
+                        <div>
+                          <p className="font-display text-base font-bold text-gold">{convRate}%</p>
+                          <p className="text-[10px] text-muted-foreground">Conv.</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </Reveal>
+        )}
       </div>
     </section>
   );
