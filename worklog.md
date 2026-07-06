@@ -126,3 +126,57 @@ The Kankoni Finsol fintech website was already production-ready with 12 sections
 - **Real bank logos**: Currently using monogram tiles; could use real bank logo images for extra polish.
 - **Performance**: Page is now very long (14 sections); could add lazy loading / Suspense for below-the-fold sections to improve LCP.
 - **A/B test CTAs**: Multiple "Apply Now" entry points (navbar, hero, service cards, how-it-works, contact, sticky mobile, exit-intent) — could add UTM/source tracking to measure conversion.
+
+---
+Task ID: webDevReview-round-2
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, fix source-passthrough bug, add product detail modal + blog search/filter + newsletter + styling polish
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from the previous round with 14 sections + floating widgets, all verified working. QA this round confirmed: lint clean, dev server healthy (200 responses), all 14 sections present in DOM, no runtime errors. The site is production-ready and now being enhanced with deeper functionality.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- agent-browser verified all 14 sections render (home, trust, services, process, eligibility, emi, compare, why-choose-us, about, partners, reviews, resources, contact, footer).
+- Dev log clean, no errors.
+
+### Bug fix
+- **`/api/leads` source passthrough** (`src/app/api/leads/route.ts`): Previously ignored the `source` field and defaulted all leads to "website", making it impossible to track which entry point (modal, exit-intent, contact form, etc.) generated a lead. Fixed by adding `source` to the LeadPayload interface, parsing it from the request body, validating against an allowlist (`website`, `quick-apply-modal`, `exit-intent`, `contact-form`, `ai-assistant`, `callback`, `newsletter`), and persisting it. Now each lead's source is trackable for conversion analytics.
+
+### New features added
+
+1. **Product Detail Modal** (`src/components/sections/product-detail-modal.tsx`): A rich, scrollable modal that shows full details for any loan product. Contains: hero header (icon, category, name, tagline, rate/max/tenure badges on royal gradient), key benefits grid, eligibility checklist, documents-required checklist, 4-step "how it works" process, and CTA buttons (Apply → opens QuickApplyModal, Calculate EMI → scrolls to #emi). Includes a `getDetail()` generator that produces tailored eligibility/docs/process/benefits content for personal-loan, home-loan, business-loan (with specific requirements) and sensible defaults for all other 19 services. Triggered by clicking the service card title (with an Info icon that appears on hover) or a dedicated Info button next to "Apply Now". Includes `useProductDetail()` hook for state management. Escape-to-close, body scroll lock, backdrop click to close. Verified end-to-end: opened "Personal Loan" detail → VLM confirmed OK rendering → Apply button opened QuickApplyModal correctly.
+
+2. **Enhanced Resources section** (`src/components/sections/resources.tsx` rewrite): Added:
+   - **Blog search bar**: Live search by title/excerpt/category. Verified "cibil" → 1 article, clear → 6 articles.
+   - **Category filter chips**: All / Loan Guides / Credit Score / Tax Saving / EMI Guide / Business Finance. Verified "Tax Saving" → 1 article.
+   - **Animated transitions**: AnimatePresence with layout animations when filtering.
+   - **Empty state**: Friendly "No articles found" message with search icon.
+   - **Newsletter subscribe strip**: Royal-gradient banner with email input + Subscribe button, posts to `/api/newsletter`, shows success state. Verified end-to-end: subscribed → success state → lead saved with source "newsletter".
+
+3. **Newsletter API** (`src/app/api/newsletter/route.ts`): POST endpoint that validates email, checks for existing subscription (idempotent), and persists as a Lead with service "Newsletter" and source "newsletter". Rate-limited 10/min. Returns `{ success, id, alreadySubscribed? }`. Verified: POST /api/newsletter 201, lead saved.
+
+4. **Leads Stats API** (`src/app/api/leads/stats/route.ts`): Admin-only GET endpoint (?key= guard) returning total lead count, breakdowns by status/source/service (top 8), and a 7-day daily bucketed trend. Ready for a future admin dashboard.
+
+5. **Service card UX enhancement**: Each service card now has a clickable title (opens product detail modal) with an Info icon that fades in on hover, plus a dedicated Info button beside "Apply Now". Two clear actions per card.
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- Product detail modal: opens with correct service, renders all sections (benefits/eligibility/documents/process), VLM-verified OK, Apply button chains to QuickApplyModal.
+- Blog search: "cibil" → 1 card, clear → 6 cards. Category "Tax Saving" → 1 card.
+- Newsletter: email submit → POST /api/newsletter 201 → success state shown → lead saved ("Newsletter Subscriber", "test-news@example.com", source "newsletter").
+- Source passthrough: confirmed new leads carry their correct source.
+- Mobile (390×844): services grid + resources section VLM-verified OK, no overflow/broken layout.
+- Dev.log: no errors.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Admin dashboard**: The leads stats API (`/api/leads/stats`) is now ready but no admin UI consumes it yet. Priority: build an admin route/section with lead analytics charts (7-day trend, source breakdown pie, service bar chart, status pipeline), lead table with assign/status-update, and CSV export.
+- **Auth**: NextAuth OTP login + role-based access still not implemented — needed before exposing admin UI.
+- **Blog detail pages**: Blog cards link to "Read more" but there's no detail view. Could add expandable inline content or a blog detail modal/route using the BlogPost.content field.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is very long (14 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Specialized EMI calculators**: Could add loan-type-specific EMI tabs (Home/Personal/Car) with preset rates and comparison.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart; fine for now but could move to Redis for multi-instance.

@@ -2,10 +2,11 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Info } from "lucide-react";
 import { SectionHeading, Reveal, staggerContainer, staggerItem } from "@/components/site/primitives";
 import { services, serviceCategories, type ServiceCategory } from "@/lib/site-data";
 import { useQuickApply } from "@/lib/quick-apply-store";
+import { ProductDetailModal, useProductDetail } from "@/components/sections/product-detail-modal";
 import { cn } from "@/lib/utils";
 
 const accentMap: Record<string, { ring: string; bg: string; text: string; glow: string }> = {
@@ -32,6 +33,7 @@ const accentMap: Record<string, { ring: string; bg: string; text: string; glow: 
 export function Services() {
   const [active, setActive] = React.useState<ServiceCategory | "All">("All");
   const openModal = useQuickApply((s) => s.openModal);
+  const productDetail = useProductDetail();
   const filtered = active === "All" ? services : services.filter((s) => s.category === active);
 
   return (
@@ -107,9 +109,17 @@ export function Services() {
                   <s.icon className="h-6 w-6" />
                 </span>
 
-                <h3 className="mt-4 font-display text-lg font-semibold tracking-tight">
-                  {s.name}
-                </h3>
+                <button
+                  type="button"
+                  onClick={() => productDetail.openDetail(s)}
+                  className="mt-4 text-left"
+                  aria-label={`View ${s.name} details`}
+                >
+                  <h3 className="flex items-center gap-1.5 font-display text-lg font-semibold tracking-tight transition-colors hover:text-royal">
+                    {s.name}
+                    <Info className="h-3.5 w-3.5 text-muted-foreground/60 opacity-0 transition-opacity group-hover:opacity-100" />
+                  </h3>
+                </button>
                 <p className="mt-0.5 text-xs font-medium uppercase tracking-wider text-gold/90">
                   {s.tagline}
                 </p>
@@ -141,19 +151,35 @@ export function Services() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => openModal(s.name)}
-                  className="mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-border/70 bg-background/60 py-2.5 text-sm font-semibold text-foreground transition-all hover:border-royal/50 hover:bg-royal hover:text-white"
-                >
-                  Apply Now
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </button>
+                <div className="mt-5 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => openModal(s.name)}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border/70 bg-background/60 py-2.5 text-sm font-semibold text-foreground transition-all hover:border-royal/50 hover:bg-royal hover:text-white"
+                  >
+                    Apply Now
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => productDetail.openDetail(s)}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/70 bg-background/60 px-3 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:border-royal/50 hover:text-royal"
+                    aria-label={`View ${s.name} details`}
+                  >
+                    <Info className="h-4 w-4" />
+                  </button>
+                </div>
               </motion.article>
             );
           })}
         </motion.div>
       </div>
+
+      <ProductDetailModal
+        service={productDetail.service}
+        open={productDetail.open}
+        onClose={productDetail.close}
+      />
     </section>
   );
 }

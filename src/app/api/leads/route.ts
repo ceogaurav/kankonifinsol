@@ -16,6 +16,7 @@ interface LeadPayload {
   income?: unknown;
   creditScore?: unknown;
   message?: unknown;
+  source?: unknown;
 }
 
 function isNonEmptyString(v: unknown): v is string {
@@ -68,6 +69,11 @@ export async function POST(req: Request) {
       );
     }
 
+    const rawSource = isNonEmptyString(body.source) ? body.source.trim() : "website";
+    // Allowlist source values to prevent arbitrary strings.
+    const allowedSources = ["website", "quick-apply-modal", "exit-intent", "contact-form", "ai-assistant", "callback"];
+    const source = allowedSources.includes(rawSource) ? rawSource : "website";
+
     const lead = await db.lead.create({
       data: {
         name,
@@ -80,6 +86,7 @@ export async function POST(req: Request) {
         income: isNonEmptyString(body.income) ? body.income.trim() : null,
         creditScore: isNonEmptyString(body.creditScore) ? body.creditScore.trim() : null,
         message: isNonEmptyString(body.message) ? body.message.trim() : null,
+        source,
       },
     });
 
