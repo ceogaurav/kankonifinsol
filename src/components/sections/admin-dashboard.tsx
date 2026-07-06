@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { SectionHeading, Reveal, AnimatedCounter } from "@/components/site/primitives";
 import { employees } from "@/lib/site-data";
+import { setAdminNotifEnabled } from "@/components/sections/admin-notifications";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -84,6 +85,7 @@ export function AdminDashboard() {
     setKey(keyInput.trim());
     setAuthed(true);
     setAuthError("");
+    setAdminNotifEnabled(true, keyInput.trim());
   }
 
   const fetchData = React.useCallback(async () => {
@@ -248,7 +250,7 @@ export function AdminDashboard() {
             <Button onClick={exportCSV} className="rounded-xl bg-royal-gradient text-white shadow-royal-glow">
               <Download className="mr-2 h-4 w-4" /> Export CSV
             </Button>
-            <Button onClick={() => { setAuthed(false); setKey(""); setKeyInput(""); }} variant="outline" className="rounded-xl">
+            <Button onClick={() => { setAdminNotifEnabled(false, ""); setAuthed(false); setKey(""); setKeyInput(""); }} variant="outline" className="rounded-xl">
               <Lock className="mr-2 h-4 w-4" /> Lock
             </Button>
           </div>
@@ -275,6 +277,109 @@ export function AdminDashboard() {
             </Reveal>
           ))}
         </div>
+
+        {/* Lead Status Pipeline */}
+        {stats && (
+          <Reveal delay={0.1}>
+            <div className="mt-6 rounded-2xl border border-border/60 bg-card/50 p-5 backdrop-blur sm:p-6">
+              <h3 className="flex items-center gap-2 font-display text-base font-semibold">
+                <ListChecks className="h-5 w-5 text-royal" /> Lead Status Pipeline
+              </h3>
+              <p className="text-xs text-muted-foreground">Conversion funnel from new lead to disbursal</p>
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
+                {(() => {
+                  const order: { key: string; label: string; color: string; barClass: string }[] = [
+                    { key: "new", label: "New", color: "text-blue-400", barClass: "bg-blue-500" },
+                    { key: "contacted", label: "Contacted", color: "text-amber-400", barClass: "bg-amber-500" },
+                    { key: "qualified", label: "Qualified", color: "text-purple-400", barClass: "bg-purple-500" },
+                    { key: "disbursed", label: "Disbursed", color: "text-green-400", barClass: "bg-green-500" },
+                    { key: "rejected", label: "Rejected", color: "text-red-400", barClass: "bg-red-500" },
+                  ];
+                  const total = stats.total || 1;
+                  return order.map((stage, i) => {
+                    const count = stats.byStatus.find((s) => s.status === stage.key)?.count ?? 0;
+                    const pct = Math.round((count / total) * 100);
+                    return (
+                      <div key={stage.key} className="relative">
+                        <div className="rounded-xl border border-border/50 bg-background/40 p-3 text-center">
+                          <p className={cn("font-display text-2xl font-bold", stage.color)}>
+                            <AnimatedCounter value={count} duration={1.2} />
+                          </p>
+                          <p className="text-[11px] font-medium text-muted-foreground">{stage.label}</p>
+                          <p className="text-[10px] text-muted-foreground/70">{pct}%</p>
+                          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${pct}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.8, delay: i * 0.08 }}
+                              className={cn("h-full rounded-full", stage.barClass)}
+                            />
+                          </div>
+                        </div>
+                        {i < order.length - 1 && (
+                          <ArrowRight className="absolute -right-2 top-1/2 hidden h-4 w-4 -translate-y-1/2 text-border lg:block" />
+                        )}
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
+          </Reveal>
+        )}
+
+        {/* Source Conversion Funnel */}
+        {stats && (
+          <Reveal delay={0.15}>
+            <div className="mt-6 rounded-2xl border border-border/60 bg-card/50 p-5 backdrop-blur sm:p-6">
+              <h3 className="flex items-center gap-2 font-display text-base font-semibold">
+                <Trophy className="h-5 w-5 text-gold" /> Source Conversion Funnel
+              </h3>
+              <p className="text-xs text-muted-foreground">Which application entry point drives the most leads</p>
+              <div className="mt-5 space-y-2.5">
+                {(() => {
+                  const total = stats.bySource.reduce((a, b) => a + b.count, 0) || 1;
+                  const sorted = [...stats.bySource].sort((a, b) => b.count - a.count);
+                  const sourceColors: Record<string, string> = {
+                    "quick-apply-modal": "bg-royal",
+                    "eligibility-result": "bg-gold",
+                    "contact-form": "bg-purple-500",
+                    "exit-intent": "bg-amber-500",
+                    "compare-matrix": "bg-green-500",
+                    "ai-assistant": "bg-blue-500",
+                    "callback": "bg-pink-500",
+                    "newsletter": "bg-cyan-500",
+                    "website": "bg-muted-foreground",
+                  };
+                  return sorted.map((s, i) => {
+                    const pct = Math.round((s.count / total) * 100);
+                    const color = sourceColors[s.source] || "bg-royal";
+                    return (
+                      <div key={s.source} className="flex items-center gap-3">
+                        <span className="w-32 shrink-0 truncate text-xs font-medium capitalize text-muted-foreground sm:w-40">
+                          {s.source.replace(/-/g, " ")}
+                        </span>
+                        <div className="relative h-7 flex-1 overflow-hidden rounded-lg bg-muted/50">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${pct}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: i * 0.05 }}
+                            className={cn("flex h-full items-center justify-end rounded-lg px-2", color)}
+                          >
+                            <span className="text-[10px] font-bold text-white">{pct}%</span>
+                          </motion.div>
+                        </div>
+                        <span className="w-8 shrink-0 text-right text-xs font-bold">{s.count}</span>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
+          </Reveal>
+        )}
 
         {/* Charts */}
         {stats && (

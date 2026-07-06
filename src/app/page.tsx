@@ -24,6 +24,7 @@ import {
 } from "@/components/sections/floating-widgets";
 import { BackToTop } from "@/components/sections/back-to-top";
 import { QuickApplyModal } from "@/components/sections/quick-apply-modal";
+import { AdminNotifications } from "@/components/sections/admin-notifications";
 import { ScrollProgress } from "@/components/site/scroll-progress";
 
 export default function Home() {
@@ -60,6 +61,7 @@ export default function Home() {
       <BackToTop />
       <ExitIntentPopup />
       <QuickApplyModal />
+      <AdminNotifications />
     </div>
   );
 }

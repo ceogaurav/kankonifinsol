@@ -117,7 +117,12 @@ export async function GET(req: Request) {
       );
     }
 
+    // Optional ?since=ISO timestamp for new-lead polling
+    const since = url.searchParams.get("since");
+    const where = since ? { createdAt: { gt: new Date(since) } } : {};
+
     const leads = await db.lead.findMany({
+      where,
       orderBy: { createdAt: "desc" },
       take: 100,
     });

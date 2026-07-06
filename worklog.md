@@ -438,3 +438,67 @@ The Kankoni Finsol website was stable from round 5 with 19 sections + floating w
 - **Notifications**: Admin dashboard could use real-time notifications (WebSocket) for new leads instead of manual refresh.
 - **Source-conversion funnel**: Multiple Apply entry points now tag sources (quick-apply-modal, eligibility-result, compare-matrix, contact-form, exit-intent) — could build a source-conversion funnel view in the admin dashboard.
 - **Lead assignment auto-routing**: Could auto-assign leads to employees based on loan type / city / round-robin rules.
+
+---
+Task ID: webDevReview-round-7
+Agent: main (Z.ai Code) — webDevReview cron
+Task: QA current site, add lead status pipeline + source-conversion funnel + real-time new-lead notifications + styling polish
+
+## 1. Current project status description/assessment
+The Kankoni Finsol website was stable from round 6 with 19 sections + floating widgets, all verified working. QA this round confirmed: dev server healthy (200), lint clean, all 19 sections present, no runtime errors. The site is production-ready and now enhanced with admin pipeline analytics and real-time notifications.
+
+## 2. Current goals / completed modifications / verification results
+
+### QA performed
+- `bun run lint` — clean.
+- Dev server confirmed healthy (200 responses, no crash from round 6).
+- agent-browser verified all 19 sections render.
+- Dev log clean, no errors.
+
+### New features added
+
+1. **Lead Status Pipeline** (`src/components/sections/admin-dashboard.tsx`): A visual conversion funnel showing the 5 lead statuses (New → Contacted → Qualified → Disbursed → Rejected) as 5 cards in a row, each with:
+   - Animated counter showing the lead count per status
+   - Percentage of total leads
+   - Color-coded progress bar (blue/amber/purple/green/red)
+   - Arrow connectors between stages (desktop)
+   This gives admins an instant at-a-glance view of where leads are dropping off in the pipeline. Verified: VLM-confirmed OK rendering with all 5 cards.
+
+2. **Source Conversion Funnel** (`src/components/sections/admin-dashboard.tsx`): A horizontal bar chart showing which application entry point (quick-apply-modal, eligibility-result, contact-form, exit-intent, compare-matrix, ai-assistant, callback, newsletter, website) drives the most leads. Each bar is color-coded per source, shows the percentage and absolute count, and animates in on scroll. Sorted by count descending. Verified: VLM-confirmed OK rendering.
+
+3. **Real-time New-Lead Notifications** (`src/components/sections/admin-notifications.tsx`): A polling-based notification system that:
+   - Activates when the admin logs in (via `setAdminNotifEnabled()` bridge function)
+   - Polls `/api/leads?since=<timestamp>` every 20 seconds for new leads
+   - Shows a slide-in glassmorphism toast (bottom-right) for each new lead with: bell icon, "New Lead Received!" header, lead name, service + source, a "View details →" link (opens QuickApplyModal), dismiss button, and an 8-second auto-dismiss progress bar
+   - Deactivates on admin lock/logout
+   - Uses a module-level bridge function so AdminDashboard can toggle polling without prop drilling
+   Verified end-to-end: created a lead via DB → notification toast appeared within 10s showing "New Lead Received!" with "Instant Check (Home Loan · Callback)" → VLM-confirmed toast visible with correct content.
+
+4. **Leads API `since` param** (`src/app/api/leads/route.ts`): Added optional `?since=ISO_timestamp` query parameter to the GET endpoint, filtering leads created after that timestamp. Used by the notification polling system. Verified: GET /api/leads?key=...&since=... returns 200 with correct filtered results.
+
+### Styling polish
+- Pipeline cards: color-coded per status, animated counters, progress bars, arrow connectors
+- Source funnel: horizontal animated bars, per-source color coding, percentage + count labels
+- Notification toast: glassmorphism card, royal-glow shadow, slide-in animation, auto-dismiss progress bar, royal-gradient bell icon
+- All new sections VLM-verified OK on desktop and mobile (390×844)
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- All 19 sections present in DOM.
+- Lead Status Pipeline: VLM-verified OK (5 status cards with counts/percentages/bars).
+- Source Conversion Funnel: VLM-verified OK (horizontal bars per source).
+- Real-time notifications: polling active (dev log shows `since` param requests every 20s), toast appeared for new "Instant Check" lead within 10s, VLM-confirmed toast content.
+- Leads API `since` param: GET 200, correct filtering.
+- Mobile (390×844): admin pipeline VLM-verified OK.
+- Dev.log: no errors.
+
+## 3. Unresolved issues or risks, and priority recommendations for next phase
+- **Auth hardening**: Admin key is still a simple constant check. Should implement NextAuth OTP login with role-based access (admin/employee/RM) and session management.
+- **Real bank logos**: Still using monogram tiles; real SVG logos would add polish.
+- **Performance**: Page is now very long (19 sections); could lazy-load below-the-fold sections with `next/dynamic` + Suspense to improve LCP.
+- **Rate-limit persistence**: In-memory rate limiter resets on server restart.
+- **Lead assignment auto-routing**: Could auto-assign leads to employees based on loan type / city / round-robin rules.
+- **WebSocket notifications**: Current notification system uses HTTP polling (every 20s); could upgrade to WebSocket/socket.io for true real-time push.
+- **Notification preferences**: Could add admin settings for notification frequency, sound alerts, email digest.
+- **Pipeline stage editing**: Could add drag-and-drop lead movement between pipeline stages (Kanban-style).
