@@ -214,7 +214,19 @@ export function AboutPage() {
                   <Globe className="h-4 w-4 text-royal" />
                   <span className="font-display text-sm font-semibold">{officeLocations[activeOffice].city}</span>
                 </div>
-                <span className="text-[10px] text-muted-foreground">{officeLocations[activeOffice].email}</span>
+                <div className="flex items-center gap-3 text-[11px]">
+                  <span className="text-muted-foreground">{officeLocations[activeOffice].email}</span>
+                  {officeLocations[activeOffice].link && (
+                    <a
+                      href={officeLocations[activeOffice].link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-semibold text-gold hover:underline"
+                    >
+                      Open in Google Maps ↗
+                    </a>
+                  )}
+                </div>
               </div>
               <iframe key={officeLocations[activeOffice].id} title={`${officeLocations[activeOffice].city} office`} src={officeLocations[activeOffice].mapSrc} className="h-80 w-full sm:h-96" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
             </div>

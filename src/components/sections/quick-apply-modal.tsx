@@ -178,7 +178,7 @@ export function QuickApplyModal() {
                     </div>
                     <div>
                       <Label className="text-xs font-medium text-muted-foreground">Mobile *</Label>
-                      <Input value={form.phone} onChange={(e) => update("phone", e.target.value)} className="mt-1.5 h-11 rounded-xl bg-background/60" placeholder="+91 90000 00000" inputMode="tel" />
+                      <Input value={form.phone} onChange={(e) => update("phone", e.target.value)} className="mt-1.5 h-11 rounded-xl bg-background/60" placeholder="+91 72040 12527" inputMode="tel" />
                     </div>
                     <div>
                       <Label className="text-xs font-medium text-muted-foreground">Email</Label>

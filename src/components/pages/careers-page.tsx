@@ -139,13 +139,13 @@ export function CareersPage() {
                 <h3 className="font-display text-xl font-bold">Don't see the right role?</h3>
                 <p className="mt-1 text-sm text-muted-foreground">Send us your resume and we'll reach out when a matching role opens.</p>
               </div>
-              <a href="mailto:careers@kankonifinsol.com" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-royal-gradient px-5 py-3 text-sm font-semibold text-white shadow-royal-glow"><Send className="h-4 w-4" /> Apply Generally</a>
+              <a href="mailto:contact@kankonifinsol.com" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-royal-gradient px-5 py-3 text-sm font-semibold text-white shadow-royal-glow"><Send className="h-4 w-4" /> Apply Generally</a>
             </div>
           </div>
         </Reveal>
       </div>
 
-      <div className="border-t border-border/50 py-6 text-center"><p className="text-xs text-muted-foreground">© {new Date().getFullYear()} {companyInfo.name} Pvt. Ltd. · careers@kankonifinsol.com</p></div>
+      <div className="border-t border-border/50 py-6 text-center"><p className="text-xs text-muted-foreground">© {new Date().getFullYear()} {companyInfo.name} Pvt. Ltd. · contact@kankonifinsol.com</p></div>
 
       {/* Job detail modal */}
       <AnimatePresence>
@@ -212,7 +212,7 @@ function JobDetailModal({ job, onClose }: { job: JobOpening; onClose: () => void
                     <div><Label className="text-xs font-medium text-muted-foreground">Full Name *</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-1 h-10 rounded-xl bg-background/60" placeholder="Your name" /></div>
                     <div><Label className="text-xs font-medium text-muted-foreground">Email *</Label><Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} type="email" className="mt-1 h-10 rounded-xl bg-background/60" placeholder="you@example.com" /></div>
                   </div>
-                  <div><Label className="text-xs font-medium text-muted-foreground">Phone</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="mt-1 h-10 rounded-xl bg-background/60" placeholder="+91 90000 00000" /></div>
+                  <div><Label className="text-xs font-medium text-muted-foreground">Phone</Label><Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="mt-1 h-10 rounded-xl bg-background/60" placeholder="+91 72040 12527" /></div>
                   <div><Label className="text-xs font-medium text-muted-foreground">Cover Note</Label><Textarea value={form.cover} onChange={(e) => setForm({ ...form, cover: e.target.value })} className="mt-1 min-h-[80px] rounded-xl bg-background/60" placeholder="Tell us why you'd be great for this role…" /></div>
                   <Button type="submit" disabled={loading} className="w-full rounded-xl bg-royal-gradient py-5 text-sm font-semibold text-white shadow-royal-glow">{loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting…</> : <><Send className="mr-2 h-4 w-4" /> Submit Application</>}</Button>
                 </form>

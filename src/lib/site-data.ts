@@ -617,11 +617,11 @@ export const certifications = [
 export const companyInfo = {
   name: "Kankoni Finsol",
   tagline: "Your Complete Financial Partner",
-  phone: "+91 90000 00000",
-  phoneHref: "tel:+919000000000",
-  whatsapp: "919000000000",
-  email: "care@kankonifinsol.com",
-  address: "Kankoni Finsol Tower, Bandra Kurla Complex, Mumbai 400051, India",
+  phone: "+91 72040 12527",
+  phoneHref: "tel:+917204012527",
+  whatsapp: "917204012527",
+  email: "contact@kankonifinsol.com",
+  address: "18/8, Vishal Tower, Mizzaina Floor, Door no MZ210, 16th Cross Road, Near SR Nagar Police Station, Sampangi Rama Nagar, Bengaluru, Karnataka 560027",
   hours: "Mon–Sat, 9:30 AM – 7:00 PM IST",
   gst: "27AABCK1234F1Z5",
 };
@@ -985,12 +985,12 @@ export interface Employee {
 }
 
 export const employees: Employee[] = [
-  { id: "emp1", name: "Rajesh Kankoni", role: "Senior RM", email: "rajesh@kankonifinsol.com", phone: "+91 90001 10001", avatar: "RK" },
-  { id: "emp2", name: "Anjali Mehta", role: "Lending Head", email: "anjali@kankonifinsol.com", phone: "+91 90001 10002", avatar: "AM" },
-  { id: "emp3", name: "Vikram Shah", role: "Credit Specialist", email: "vikram@kankonifinsol.com", phone: "+91 90001 10003", avatar: "VS" },
-  { id: "emp4", name: "Sneha Reddy", role: "Wealth Advisor", email: "sneha@kankonifinsol.com", phone: "+91 90001 10004", avatar: "SR" },
-  { id: "emp5", name: "Amit Patel", role: "MSME RM", email: "amit@kankonifinsol.com", phone: "+91 90001 10005", avatar: "AP" },
-  { id: "emp6", name: "Priya Iyer", role: "Home Loan RM", email: "priya@kankonifinsol.com", phone: "+91 90001 10006", avatar: "PI" },
+  { id: "emp1", name: "Rajesh Kankoni", role: "Senior RM", email: "rajesh@kankonifinsol.com", phone: "+91 72040 12527", avatar: "RK" },
+  { id: "emp2", name: "Anjali Mehta", role: "Lending Head", email: "anjali@kankonifinsol.com", phone: "+91 72040 12527", avatar: "AM" },
+  { id: "emp3", name: "Vikram Shah", role: "Credit Specialist", email: "vikram@kankonifinsol.com", phone: "+91 72040 12527", avatar: "VS" },
+  { id: "emp4", name: "Sneha Reddy", role: "Wealth Advisor", email: "sneha@kankonifinsol.com", phone: "+91 72040 12527", avatar: "SR" },
+  { id: "emp5", name: "Amit Patel", role: "MSME RM", email: "amit@kankonifinsol.com", phone: "+91 72040 12527", avatar: "AP" },
+  { id: "emp6", name: "Priya Iyer", role: "Home Loan RM", email: "priya@kankonifinsol.com", phone: "+91 72040 12527", avatar: "PI" },
 ];
 
 
@@ -1037,13 +1037,52 @@ export interface OfficeLocation {
   hours: string;
   isHQ: boolean;
   mapSrc: string;
+  link?: string;
 }
 
 export const officeLocations: OfficeLocation[] = [
-  { id: "hq", city: "Mumbai (HQ)", address: "Kankoni Finsol Tower, G-Block, Bandra Kurla Complex, Mumbai 400051, Maharashtra", phone: "+91 90000 10001", email: "mumbai@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: true, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=72.86%2C19.05%2C72.90%2C19.08&layer=mapnik&marker=19.065%2C72.88" },
-  { id: "bengaluru", city: "Bengaluru", address: "Prestige Atrium, 3rd Floor, St. Mark's Road, Bengaluru 560001, Karnataka", phone: "+91 90000 10002", email: "bengaluru@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=77.58%2C12.96%2C77.62%2C12.98&layer=mapnik&marker=12.972%2C77.6" },
-  { id: "delhi", city: "Delhi NCR", address: "Cyber Hub, Tower 4, 5th Floor, DLF Phase 3, Gurugram 122002, Haryana", phone: "+91 90000 10003", email: "delhi@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=77.07%2C28.48%2C77.11%2C28.51&layer=mapnik&marker=28.494%2C77.09" },
-  { id: "chennai", city: "Chennai", address: "Tidel Park, Block A, 4th Floor, Taramani, Chennai 600113, Tamil Nadu", phone: "+91 90000 10004", email: "chennai@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=80.23%2C12.98%2C80.25%2C13.00&layer=mapnik&marker=12.992%2C80.241" },
-  { id: "hyderabad", city: "Hyderabad", address: "Laxmi Cyber City, 6th Floor, HITEC City, Hyderabad 500081, Telangana", phone: "+91 90000 10005", email: "hyderabad@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=78.37%2C17.43%2C78.40%2C17.46&layer=mapnik&marker=17.443%2C78.384" },
-  { id: "pune", city: "Pune", address: "World Trade Center, 7th Floor, Kharadi, Pune 411014, Maharashtra", phone: "+91 90000 10006", email: "pune@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=73.93%2C18.54%2C73.96%2C18.57&layer=mapnik&marker=18.557%2C73.942" },
+  {
+    id: "bangalore-main",
+    city: "Bengaluru Main Office (HQ)",
+    address: "18/8, Vishal Tower, Mizzaina Floor, Door no MZ210, 16th Cross Road, Near SR Nagar Police Station, Sampangi Rama Nagar, Bengaluru, Karnataka 560027",
+    phone: "7204012527",
+    email: "contact@kankonifinsol.com",
+    hours: "Mon–Sat, 9:30 AM – 7:00 PM IST",
+    isHQ: true,
+    link: "https://maps.app.goo.gl/a7xFQquqELzLB1v1A",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.134475926789!2d77.59122597505274!3d12.963245687351316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15d9a156a599%3A0x639b6ebf7aaa77cd!2sKankoni%20Fin%20Sol!5e0!3m2!1sen!2sin!4v1783512237802!5m2!1sen!2sin",
+  },
+  {
+    id: "vaniyambadi",
+    city: "Vaniyambadi (Tamil Nadu)",
+    address: "No.1302, 1st floor, PJN Road, Shakirabad, Vaniyambadi 635751",
+    phone: "9626424142",
+    email: "contact@kankonifinsol.com",
+    hours: "Mon–Sat, 9:30 AM – 7:00 PM IST",
+    isHQ: false,
+    link: "https://maps.app.goo.gl/zYPUiab9kFoUJv8g6",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d243.27907692620786!2d78.61700298094597!3d12.683029301913242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTLCsDQwJzU4LjkiTiA3OMKwMzcnMDEuNSJF!5e0!3m2!1sen!2sin!4v1783503263839!5m2!1sen!2sin",
+  },
+  {
+    id: "electronic-city",
+    city: "Electronic City (Bengaluru)",
+    address: "193, 1st floor, Konappana Agrahara, Electronic City, Konappana Agrahara, Karnataka 560100",
+    phone: "9036240631",
+    email: "contact@kankonifinsol.com",
+    hours: "Mon–Sat, 9:30 AM – 7:00 PM IST",
+    isHQ: false,
+    link: "https://maps.app.goo.gl/r4hpDqR9EeUownwx5",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3889.8349303147893!2d77.66344699999999!3d12.853935999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTLCsDUxJzE0LjIiTiA3N8KwMzknNDguNCJF!5e0!3m2!1sen!2sin!4v1783511811325!5m2!1sen!2sin",
+  },
+  {
+    id: "chennai",
+    city: "Chennai Branch (Tamil Nadu)",
+    address: "No : 100, Sathyamoorthy Nagar, Fish Market Street, Poonamallee High Road, Maduravayal, Chennai - 600 095. Near Chennai Ford Car Service Centre.",
+    phone: "8072859827",
+    email: "contact@kankonifinsol.com",
+    hours: "Mon–Sat, 9:30 AM – 7:00 PM IST",
+    isHQ: false,
+    link: "https://maps.app.goo.gl/cUbb8JMmdLhLWkt18",
+    mapSrc: "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3886.517279312224!2d80.17092587507808!3d13.066369387257764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTPCsDAzJzU4LjkiTiA4MMKwMTAnMjQuNiJF!5e0!3m2!1sen!2sin!4v1783512142486!5m2!1sen!2sin",
+  },
 ];

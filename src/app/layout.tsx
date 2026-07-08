@@ -57,9 +57,12 @@ export const metadata: Metadata = {
   publisher: "Kankoni Finsol",
   alternates: { canonical: siteUrl },
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "Kankoni Finsol — India's Premium Financial Solutions Partner",
@@ -100,8 +103,8 @@ const jsonLd = {
   description:
     "India's premium financial solutions company providing complete financial services under one platform.",
   url: siteUrl,
-  telephone: "+91-90000-00000",
-  email: "care@kankonifinsol.com",
+  telephone: "+91-7204012527",
+  email: "contact@kankonifinsol.com",
   areaServed: "IN",
   priceRange: "₹₹",
   aggregateRating: {

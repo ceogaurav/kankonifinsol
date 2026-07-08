@@ -54,13 +54,8 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-6">
           {/* Brand */}
           <div className="col-span-2">
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-royal-gradient shadow-royal-glow">
-                <span className="font-display text-lg font-extrabold text-white">K</span>
-              </span>
-              <span className="font-display text-base font-bold text-white">
-                Kankoni<span className="text-gold"> Finsol</span>
-              </span>
+            <div className="flex h-14 w-[200px] sm:h-16 sm:w-[230px] items-center justify-center rounded-xl border border-white/25 bg-white px-3.5 py-2 shadow-md">
+              <img src="/logo.png" alt="Kankoni Finsol Logo" className="max-h-full w-full object-contain" />
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
               India's premium financial solutions partner. Complete financial services under one platform — with white-glove dedication.
@@ -79,28 +74,142 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          {Object.values(footerLinks).map((col) => (
-            <div key={col.title}>
-              <h4 className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">{col.title}</h4>
-              <ul className="mt-4 space-y-2.5">
-                {col.links.map((l) => {
-                  const target = handleLink(l);
-                  return (
-                    <li key={l}>
-                      <a href="#contact" onClick={(e) => { if (target) { e.preventDefault(); navigate(target); } }} className="text-sm text-white/70 transition-colors hover:text-gold">
-                        {l}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
+          {/* Product links */}
+          <div>
+            <h4 className="font-display text-xs font-semibold uppercase tracking-wider text-gold">
+              {footerLinks.products.title}
+            </h4>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {footerLinks.products.links.slice(0, 6).map((l) => (
+                <li key={l}>
+                  <a href="#services" onClick={(e) => { e.preventDefault(); navigate("services"); }} className="transition-colors hover:text-white">{l}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display text-xs font-semibold uppercase tracking-wider text-gold">
+              {footerLinks.cards.title}
+            </h4>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {footerLinks.cards.links.map((l) => (
+                <li key={l}>
+                  <a href="#services" onClick={(e) => { e.preventDefault(); navigate("services"); }} className="transition-colors hover:text-white">{l}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display text-xs font-semibold uppercase tracking-wider text-gold">
+              {footerLinks.company.title}
+            </h4>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {footerLinks.company.links.map((l) => (
+                <li key={l}>
+                  <a href="#about" onClick={(e) => { e.preventDefault(); const p = handleLink(l); if (p) navigate(p); }} className="transition-colors hover:text-white">{l}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display text-xs font-semibold uppercase tracking-wider text-gold">
+              {footerLinks.resources.title}
+            </h4>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {footerLinks.resources.links.map((l) => (
+                <li key={l}>
+                  <a href="#resources" onClick={(e) => { e.preventDefault(); navigate("resources"); }} className="transition-colors hover:text-white">{l}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* All Office Locations Grid in Footer */}
+        <div className="mt-12 border-t border-white/10 pt-10">
+          <h4 className="mb-6 flex items-center gap-2 font-display text-sm font-bold uppercase tracking-wider text-gold">
+            <MapPin className="h-4 w-4" /> Our Branch Offices across India
+          </h4>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+              <div className="flex items-center justify-between">
+                <span className="font-display text-sm font-bold text-white">Bengaluru Main (HQ)</span>
+                <span className="rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-semibold text-gold">HQ</span>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-white/70">
+                18/8, Vishal Tower, Mizzaina Floor, Door no MZ210, 16th Cross Rd, Near SR Nagar Police Station, Sampangi Rama Nagar, Bengaluru 560027
+              </p>
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3 text-xs">
+                <a href="tel:7204012527" className="flex items-center gap-1.5 font-semibold text-gold hover:underline">
+                  <Phone className="h-3 w-3" /> 7204012527
+                </a>
+                <a href="https://maps.app.goo.gl/a7xFQquqELzLB1v1A" target="_blank" rel="noreferrer" className="text-white/80 underline hover:text-white">
+                  Map →
+                </a>
+              </div>
             </div>
-          ))}
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+              <div className="flex items-center justify-between">
+                <span className="font-display text-sm font-bold text-white">Vaniyambadi (TN)</span>
+                <span className="rounded-full bg-royal/40 px-2 py-0.5 text-[10px] font-semibold text-white">Branch</span>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-white/70">
+                No.1302, 1st floor, PJN Road, Shakirabad, Vaniyambadi, Tamil Nadu 635751
+              </p>
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3 text-xs">
+                <a href="tel:9626424142" className="flex items-center gap-1.5 font-semibold text-gold hover:underline">
+                  <Phone className="h-3 w-3" /> 9626424142
+                </a>
+                <a href="https://maps.app.goo.gl/zYPUiab9kFoUJv8g6" target="_blank" rel="noreferrer" className="text-white/80 underline hover:text-white">
+                  Map →
+                </a>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+              <div className="flex items-center justify-between">
+                <span className="font-display text-sm font-bold text-white">Electronic City</span>
+                <span className="rounded-full bg-royal/40 px-2 py-0.5 text-[10px] font-semibold text-white">Bengaluru</span>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-white/70">
+                193, 1st floor, Konappana Agrahara, Electronic City, Konappana Agrahara, Karnataka 560100
+              </p>
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3 text-xs">
+                <a href="tel:9036240631" className="flex items-center gap-1.5 font-semibold text-gold hover:underline">
+                  <Phone className="h-3 w-3" /> 9036240631
+                </a>
+                <a href="https://maps.app.goo.gl/r4hpDqR9EeUownwx5" target="_blank" rel="noreferrer" className="text-white/80 underline hover:text-white">
+                  Map →
+                </a>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+              <div className="flex items-center justify-between">
+                <span className="font-display text-sm font-bold text-white">Chennai Branch</span>
+                <span className="rounded-full bg-royal/40 px-2 py-0.5 text-[10px] font-semibold text-white">Tamil Nadu</span>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-white/70">
+                No : 100, Sathyamoorthy Nagar, Fish Market Street, Poonamallee High Road, Maduravayal, Chennai - 600 095
+              </p>
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3 text-xs">
+                <a href="tel:8072859827" className="flex items-center gap-1.5 font-semibold text-gold hover:underline">
+                  <Phone className="h-3 w-3" /> 8072859827
+                </a>
+                <a href="https://maps.app.goo.gl/cUbb8JMmdLhLWkt18" target="_blank" rel="noreferrer" className="text-white/80 underline hover:text-white">
+                  Map →
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Contact row */}
-        <div className="mt-12 grid grid-cols-1 gap-4 border-t border-white/10 pt-8 sm:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 border-t border-white/10 pt-8 sm:grid-cols-3">
           <a href={companyInfo.phoneHref} className="flex items-center gap-3 text-sm text-white/70 transition-colors hover:text-gold">
             <Phone className="h-4 w-4 text-gold" /> {companyInfo.phone}
           </a>

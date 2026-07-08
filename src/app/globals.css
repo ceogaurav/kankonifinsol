@@ -173,27 +173,24 @@
     -webkit-backdrop-filter: blur(24px) saturate(180%);
   }
 
-  /* Brand gradients & text */
+  /* Brand text colors & glows (bulletproof against clipping bugs across browsers) */
   .text-gradient-gold {
-    background: linear-gradient(120deg, var(--gold) 0%, oklch(0.92 0.16 75) 50%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    color: #F59E0B !important;
+    background: none !important;
+    -webkit-text-fill-color: #F59E0B !important;
+    text-shadow: 0 0 24px rgba(245, 158, 11, 0.35);
   }
   .text-gradient-royal {
-    background: linear-gradient(120deg, var(--royal) 0%, oklch(0.6 0.2 290) 50%, var(--royal) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    color: #60A5FA !important;
+    background: none !important;
+    -webkit-text-fill-color: #60A5FA !important;
+    text-shadow: 0 0 24px rgba(96, 165, 250, 0.35);
   }
   .text-gradient-hero {
-    background: linear-gradient(110deg, var(--foreground) 0%, var(--royal) 45%, var(--gold) 90%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    color: #F59E0B !important;
+    background: none !important;
+    -webkit-text-fill-color: #F59E0B !important;
+    text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
   }
   .bg-royal-gradient {
     background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 45%, var(--royal) 100%);
@@ -332,4 +329,32 @@
 @keyframes kankoni-orbit {
   from { transform: rotate(0deg) translateX(var(--orbit-r, 120px)) rotate(0deg); }
   to { transform: rotate(360deg) translateX(var(--orbit-r, 120px)) rotate(-360deg); }
+}
+
+/* Global unlayered overrides to guarantee no solid gradient rectangle ever renders on headings */
+.text-gradient-gold,
+span.text-gradient-gold {
+  color: #F59E0B !important;
+  background: transparent !important;
+  background-image: none !important;
+  -webkit-text-fill-color: #F59E0B !important;
+  text-shadow: 0 0 24px rgba(245, 158, 11, 0.35) !important;
+}
+
+.text-gradient-royal,
+span.text-gradient-royal {
+  color: #60A5FA !important;
+  background: transparent !important;
+  background-image: none !important;
+  -webkit-text-fill-color: #60A5FA !important;
+  text-shadow: 0 0 24px rgba(96, 165, 250, 0.35) !important;
+}
+
+.text-gradient-hero,
+span.text-gradient-hero {
+  color: #F59E0B !important;
+  background: transparent !important;
+  background-image: none !important;
+  -webkit-text-fill-color: #F59E0B !important;
+  text-shadow: 0 0 30px rgba(245, 158, 11, 0.4) !important;
 }

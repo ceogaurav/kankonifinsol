@@ -15,22 +15,14 @@ import { cn } from "@/lib/utils";
 function Logo() {
   const navigate = useRouter((s) => s.navigate);
   return (
-    <button onClick={() => navigate("home")} className="group flex items-center gap-2.5" aria-label="Kankoni Finsol home">
-      <span className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-xl bg-royal-gradient shadow-royal-glow">
-        <span className="font-display text-lg font-extrabold text-white">K</span>
-        <span className="absolute inset-0 bg-gradient-to-tr from-gold/0 via-gold/30 to-gold/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-base font-bold tracking-tight">
-          Kankoni<span className="text-gold"> Finsol</span>
-        </span>
-        <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-          Financial Solutions
-        </span>
-      </span>
+    <button onClick={() => navigate("home")} className="group flex shrink-0 items-center text-left" aria-label="Kankoni Finsol home">
+      <div className="relative flex h-12 w-[165px] sm:h-13 sm:w-[190px] shrink-0 items-center justify-center rounded-xl border border-white/30 bg-white px-3 py-1.5 shadow-md transition-transform duration-300 group-hover:scale-[1.03]">
+        <img src="/logo.png" alt="Kankoni Finsol Logo" className="max-h-full w-full object-contain" />
+      </div>
     </button>
   );
 }
+
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
