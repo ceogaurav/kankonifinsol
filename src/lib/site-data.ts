@@ -994,3 +994,56 @@ export const employees: Employee[] = [
 ];
 
 
+
+/* ---------------- Career / Job listings ---------------- */
+export const milestones = [
+  { year: "2018", title: "The beginning", desc: "Kankoni Finsol founded in Mumbai with a mission to democratise premium financial services for every Indian." },
+  { year: "2020", title: "100+ bank partnerships", desc: "Crossed our first century of banking partnerships, becoming one of India's most-connected loan aggregators." },
+  { year: "2022", title: "₹100 Cr disbursed", desc: "Facilitated over ₹100 crore in loans, earning a 4.9★ Google rating from 10,000+ happy customers." },
+  { year: "2023", title: "AI-powered platform", desc: "Launched our AI eligibility engine and digital-first doorstep service across 50+ cities pan-India." },
+  { year: "2025", title: "₹500 Cr+ & ISO certified", desc: "Facilitated ₹500 crore+ in loans, achieved ISO 27001 certification and expanded to 12 branch offices." },
+];
+
+export interface JobOpening {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: "Full-time" | "Contract" | "Internship";
+  experience: string;
+  description: string;
+  responsibilities: string[];
+  requirements: string[];
+  posted: string;
+}
+
+export const jobOpenings: JobOpening[] = [
+  { id: "job1", title: "Senior Relationship Manager — Loans", department: "Sales & Lending", location: "Mumbai, MH", type: "Full-time", experience: "4–7 years", description: "Own a portfolio of high-value loan clients across home, LAP and business loans. Drive end-to-end disbursal while delivering white-glove service that defines the Kankoni experience.", responsibilities: ["Manage a portfolio of 80+ active loan files from application to disbursal", "Negotiate with 100+ partner banks to secure the best rates for clients", "Conduct client consultations and financial needs analysis", "Maintain disbursal targets and conversion metrics"], requirements: ["4–7 years in retail lending, loan advisory or banking sales", "Deep knowledge of home loans, LAP and business loan products", "Excellent communication and negotiation skills"], posted: "2025-01-10" },
+  { id: "job2", title: "Credit Analyst", department: "Credit & Underwriting", location: "Bengaluru, KA", type: "Full-time", experience: "2–5 years", description: "Assess loan applications across product lines, perform financial analysis and risk assessment, and make data-driven recommendations to partner banks.", responsibilities: ["Analyse financial statements, bank statements and credit reports", "Assess borrower creditworthiness and recommend loan structures", "Build and maintain credit risk models"], requirements: ["2–5 years in credit analysis or underwriting", "CA/MBA Finance or equivalent", "Strong Excel and financial modelling skills"], posted: "2025-01-08" },
+  { id: "job3", title: "Full-Stack Developer (Next.js)", department: "Technology", location: "Remote / Hybrid — Pune", type: "Full-time", experience: "3–6 years", description: "Build and scale the Kankoni digital platform — from AI-powered eligibility engines to the admin CRM. Work with Next.js, TypeScript, Prisma and the latest fintech tooling.", responsibilities: ["Develop and maintain Next.js 16 features end-to-end", "Build REST APIs and integrate with banking/NBFC partner systems", "Implement AI/LLM-powered features (eligibility, chatbot)"], requirements: ["3–6 years in full-stack web development", "Strong TypeScript, React and Node.js experience", "Experience with Prisma/PostgreSQL/SQLite"], posted: "2025-01-12" },
+  { id: "job4", title: "AI/ML Engineer — Financial Products", department: "Technology", location: "Mumbai, MH", type: "Full-time", experience: "3–6 years", description: "Design and deploy ML models that power our AI eligibility engine, credit scoring and personalised loan recommendations.", responsibilities: ["Build and deploy ML models for credit scoring and eligibility", "Fine-tune LLMs for financial advisory and chatbot use cases", "Develop recommendation engines for loan product matching"], requirements: ["3–6 years in ML/AI engineering", "Strong Python, PyTorch/TensorFlow skills", "Experience with LLM fine-tuning and RAG pipelines"], posted: "2025-01-05" },
+  { id: "job5", title: "Marketing & Growth Lead", department: "Marketing", location: "Mumbai, MH", type: "Full-time", experience: "5–8 years", description: "Own the growth engine — from performance marketing to brand. Drive customer acquisition across digital channels and build Kankoni into India's most trusted financial brand.", responsibilities: ["Design and execute performance marketing campaigns (Google, Meta, LinkedIn)", "Manage SEO, content marketing and social media strategy", "Analyse funnel metrics and optimise CAC/LTV"], requirements: ["5–8 years in growth/marketing, preferably in fintech", "Strong analytical and data-driven approach", "Experience managing ₹1 Cr+ monthly ad budgets"], posted: "2025-01-03" },
+  { id: "job6", title: "Operations & Compliance Manager", department: "Operations", location: "Delhi NCR", type: "Full-time", experience: "4–7 years", description: "Ensure smooth operations across document collection, verification and disbursal. Maintain compliance with RBI, SEBI and IRDAI regulations.", responsibilities: ["Manage the loan processing operations team (15+ members)", "Ensure compliance with RBI, SEBI, IRDAI and data protection regulations", "Optimise TAT across the loan lifecycle"], requirements: ["4–7 years in banking operations or compliance", "Deep knowledge of RBI lending guidelines and KYC norms", "Strong process orientation and team management skills"], posted: "2025-01-06" },
+  { id: "job7", title: "Customer Success Specialist", department: "Customer Experience", location: "Hyderabad, TS", type: "Full-time", experience: "1–3 years", description: "Be the voice of Kankoni for our customers. Guide borrowers through their loan journey, resolve queries and ensure every interaction reflects our premium service promise.", responsibilities: ["Handle customer queries via phone, email, WhatsApp and chat", "Guide customers through document submission and verification", "Coordinate with RMs and partner banks for status updates"], requirements: ["1–3 years in customer service, preferably in financial services", "Excellent communication in English and Hindi", "Empathy, patience and problem-solving mindset"], posted: "2025-01-09" },
+  { id: "job8", title: "Business Development Intern", department: "Sales & Lending", location: "Chennai, TN", type: "Internship", experience: "0–1 year", description: "Kickstart your career in fintech! Support the BD team in market research, lead generation and partner onboarding. A 6-month internship with a strong possibility of a full-time offer.", responsibilities: ["Conduct market research on lending trends and competitor offerings", "Support lead generation and outreach to potential partners", "Assist in preparing pitch decks and sales collateral"], requirements: ["MBA/PGDM student or recent graduate (Finance/Marketing)", "Strong analytical and presentation skills", "Available for 6 months, full-time"], posted: "2025-01-11" },
+];
+
+export interface OfficeLocation {
+  id: string;
+  city: string;
+  address: string;
+  phone: string;
+  email: string;
+  hours: string;
+  isHQ: boolean;
+  mapSrc: string;
+}
+
+export const officeLocations: OfficeLocation[] = [
+  { id: "hq", city: "Mumbai (HQ)", address: "Kankoni Finsol Tower, G-Block, Bandra Kurla Complex, Mumbai 400051, Maharashtra", phone: "+91 90000 10001", email: "mumbai@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: true, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=72.86%2C19.05%2C72.90%2C19.08&layer=mapnik&marker=19.065%2C72.88" },
+  { id: "bengaluru", city: "Bengaluru", address: "Prestige Atrium, 3rd Floor, St. Mark's Road, Bengaluru 560001, Karnataka", phone: "+91 90000 10002", email: "bengaluru@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=77.58%2C12.96%2C77.62%2C12.98&layer=mapnik&marker=12.972%2C77.6" },
+  { id: "delhi", city: "Delhi NCR", address: "Cyber Hub, Tower 4, 5th Floor, DLF Phase 3, Gurugram 122002, Haryana", phone: "+91 90000 10003", email: "delhi@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=77.07%2C28.48%2C77.11%2C28.51&layer=mapnik&marker=28.494%2C77.09" },
+  { id: "chennai", city: "Chennai", address: "Tidel Park, Block A, 4th Floor, Taramani, Chennai 600113, Tamil Nadu", phone: "+91 90000 10004", email: "chennai@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=80.23%2C12.98%2C80.25%2C13.00&layer=mapnik&marker=12.992%2C80.241" },
+  { id: "hyderabad", city: "Hyderabad", address: "Laxmi Cyber City, 6th Floor, HITEC City, Hyderabad 500081, Telangana", phone: "+91 90000 10005", email: "hyderabad@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=78.37%2C17.43%2C78.40%2C17.46&layer=mapnik&marker=17.443%2C78.384" },
+  { id: "pune", city: "Pune", address: "World Trade Center, 7th Floor, Kharadi, Pune 411014, Maharashtra", phone: "+91 90000 10006", email: "pune@kankonifinsol.com", hours: "Mon–Sat, 9:30 AM – 7:00 PM", isHQ: false, mapSrc: "https://www.openstreetmap.org/export/embed.html?bbox=73.93%2C18.54%2C73.96%2C18.57&layer=mapnik&marker=18.557%2C73.942" },
+];

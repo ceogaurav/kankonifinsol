@@ -2,6 +2,7 @@
 
 import { Phone, Mail, MapPin, MessageCircle, ShieldCheck, Linkedin, Twitter, Facebook, Instagram, Send } from "lucide-react";
 import { companyInfo, footerLinks } from "@/lib/site-data";
+import { useRouter, type PageName } from "@/lib/router-store";
 
 const socials = [
   { icon: Linkedin, href: "#", label: "LinkedIn" },
@@ -13,6 +14,16 @@ const socials = [
 const whatsappLink = `https://wa.me/${companyInfo.whatsapp}`;
 
 export function Footer() {
+  const navigate = useRouter((s) => s.navigate);
+
+  function handleLink(link: string): PageName | null {
+    const m: Record<string, PageName> = {
+      "About Us": "about", "Careers": "careers", "Contact": "contact",
+      "Blogs": "resources", "EMI Calculator": "emi", "Eligibility Checker": "eligibility",
+      "Bank Partners": "partners", "Customer Stories": "reviews", "FAQs": "resources",
+    };
+    return m[link] || null;
+  }
   return (
     <footer className="relative mt-auto overflow-hidden border-t border-border/60 bg-navy-deep text-white/80">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-mesh opacity-30" />
@@ -73,13 +84,16 @@ export function Footer() {
             <div key={col.title}>
               <h4 className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">{col.title}</h4>
               <ul className="mt-4 space-y-2.5">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a href="#contact" className="text-sm text-white/70 transition-colors hover:text-gold">
-                      {l}
-                    </a>
-                  </li>
-                ))}
+                {col.links.map((l) => {
+                  const target = handleLink(l);
+                  return (
+                    <li key={l}>
+                      <a href="#contact" onClick={(e) => { if (target) { e.preventDefault(); navigate(target); } }} className="text-sm text-white/70 transition-colors hover:text-gold">
+                        {l}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
@@ -104,7 +118,7 @@ export function Footer() {
           <div className="flex items-center gap-4">
             <a href="#contact" className="hover:text-gold">Privacy</a>
             <a href="#contact" className="hover:text-gold">Terms</a>
-            <a href="#contact" className="hover:text-gold">Careers</a>
+            <a href="#contact" onClick={(e) => { e.preventDefault(); navigate("careers"); }} className="hover:text-gold">Careers</a>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-gold" /> ISO 27001
             </span>

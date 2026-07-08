@@ -625,3 +625,50 @@ The Kankoni Finsol website was stable from round 8 with 19 sections + floating w
 - **WebSocket notifications**: Current notification system uses HTTP polling (every 20s); could upgrade to WebSocket/socket.io for true real-time push.
 - **Lead edit**: The drawer currently edits status/assignee only; could add editing of name/phone/email/loan amount fields.
 - **Lead activity log**: Could track a history of status changes + notes per lead (timeline view in drawer).
+
+---
+Task ID: user-request-separate-pages
+Agent: main (Z.ai Code)
+Task: Create separate page for every function (client-side multi-page router)
+
+## 1. Current project status description/assessment
+User requested separate pages for every function instead of a single long scrolling page. The site previously had 19+ sections all stacked on one page. Implemented a client-side page router (Zustand) within the single `/` route constraint, giving each function its own dedicated page navigable from the navbar.
+
+## 2. Current goals / completed modifications / verification results
+
+### Architecture: Client-side page router
+- **`src/lib/router-store.ts`**: Zustand store with `page` state (12 pages: home, services, eligibility, emi, compare, about, partners, reviews, resources, contact, admin, careers) and `navigate()` function. Exports `navItems` array for the navbar.
+- **`src/components/page-router.tsx`**: Switch component that renders the active page based on the router store.
+- **`src/components/site/page-shell.tsx`**: Reusable PageShell component with consistent page header (eyebrow badge, title, description, back-to-home button) used by all sub-pages.
+
+### 12 separate pages created (`src/components/pages/`)
+1. **HomePage** (`home-page.tsx`): Redesigned landing with hero, trust stats, and a grid of 11 navigation cards linking to all sub-pages + CTA strip.
+2. **ServicesPage** (`services-page.tsx`): All 22 services grid with product detail modal.
+3. **EligibilityPage** (`eligibility-page.tsx`): AI eligibility checker.
+4. **EmiPage** (`emi-page.tsx`): Basic EMI calculator + specialised EMI Pro with loan-type tabs.
+5. **ComparePage** (`compare-page.tsx`): Compare loans table + feature comparison matrix.
+6. **AboutPage** (`about-page.tsx`): Full company info — hero, stats, mission/vision, values, journey timeline, leadership, awards, 6 office locations with interactive map.
+7. **PartnersPage** (`partners-page.tsx`): Banking partners marquee.
+8. **ReviewsPage** (`reviews-page.tsx`): Customer testimonials carousel.
+9. **ResourcesPage** (`resources-page.tsx`): Blogs with search/filter + FAQs with search + newsletter + referral banner.
+10. **ContactPage** (`contact-page.tsx`): Lead form + contact info + map.
+11. **AdminPage** (`admin-page.tsx`): Admin dashboard with 4 tabs (Leads, Pipeline Kanban, Referrals, Team) + lead drawer + notifications.
+12. **CareersPage** (`careers-page.tsx`): 8 job openings with department filter + job detail modal with application form.
+
+### Updated components
+- **Navbar**: Completely rewritten to use `useRouter` for navigation instead of anchor links. Active page highlighted. Services mega-menu navigates to services page. Mobile sheet uses router buttons.
+- **Footer**: All links now use the router to navigate to the appropriate page.
+- **page.tsx**: Simplified to render Navbar + PageRouter + Footer + floating widgets.
+
+### Verification results
+- `bun run lint` — clean, 0 errors.
+- Page compiles, returns 200.
+- Home page: 11 navigation cards render, VLM-verified OK.
+- Navigation tested: Services → "Complete financial solutions", EMI → "Interactive EMI Calculator", About → "Building India's most trusted financial partner", Careers → "Build the future of Indian finance" — all pages render correctly.
+- Back button: "Back to Home" returns to home page correctly.
+- All floating widgets (AI assistant, WhatsApp, quick-apply modal, exit-intent, notifications) work across all pages.
+
+## 3. Unresolved issues or risks
+- The pages are client-side rendered (not separate URLs) due to the single-route constraint. If shareable URLs are needed, would need to add actual Next.js routes or use URL hash/query params.
+- The old section components (about.tsx, how-it-works.tsx, etc.) are still in the codebase but no longer imported by page.tsx. Could be cleaned up.
+- The page-overlay-store.ts is now unused (replaced by router-store). Could be removed.
