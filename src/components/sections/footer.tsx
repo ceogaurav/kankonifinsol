@@ -1,14 +1,14 @@
 "use client";
 
-import { Phone, Mail, MapPin, MessageCircle, ShieldCheck, Linkedin, Twitter, Facebook, Instagram, Send } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, ShieldCheck, Linkedin, Twitter, Facebook, Instagram, Send, AtSign } from "lucide-react";
 import { companyInfo, footerLinks } from "@/lib/site-data";
 import { useRouter, type PageName } from "@/lib/router-store";
 
 const socials = [
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Twitter, href: "https://x.com/kankoni_finsol", label: "Twitter" },
+  { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61591992620858", label: "Facebook" },
+  { icon: Instagram, href: "https://www.instagram.com/kankoni_finsol/", label: "Instagram" },
+  { icon: AtSign, href: "https://www.threads.com/@kankoni_finsol", label: "Threads" },
 ];
 
 const whatsappLink = `https://wa.me/${companyInfo.whatsapp}`;
@@ -225,9 +225,9 @@ export function Footer() {
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row">
           <p>© {new Date().getFullYear()} Kankoni Finsol Pvt. Ltd. All rights reserved. GST: {companyInfo.gst}</p>
           <div className="flex items-center gap-4">
-            <a href="#contact" className="hover:text-gold">Privacy</a>
-            <a href="#contact" className="hover:text-gold">Terms</a>
-            <a href="#contact" onClick={(e) => { e.preventDefault(); navigate("careers"); }} className="hover:text-gold">Careers</a>
+            <a href="#privacy" onClick={(e) => { e.preventDefault(); navigate("privacy"); }} className="hover:text-gold">Privacy</a>
+            <a href="#terms" onClick={(e) => { e.preventDefault(); navigate("terms"); }} className="hover:text-gold">Terms</a>
+            <a href="#careers" onClick={(e) => { e.preventDefault(); navigate("careers"); }} className="hover:text-gold">Careers</a>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-gold" /> ISO 27001
             </span>

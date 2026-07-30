@@ -14,7 +14,9 @@ export type PageName =
   | "resources"
   | "contact"
   | "admin"
-  | "careers";
+  | "careers"
+  | "privacy"
+  | "terms";
 
 interface RouterState {
   page: PageName;

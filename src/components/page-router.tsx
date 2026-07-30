@@ -13,6 +13,8 @@ import { ResourcesPage } from "@/components/pages/resources-page";
 import { ContactPage } from "@/components/pages/contact-page";
 import { AdminPage } from "@/components/pages/admin-page";
 import { CareersPage } from "@/components/pages/careers-page";
+import { PrivacyPage } from "@/components/pages/privacy-page";
+import { TermsPage } from "@/components/pages/terms-page";
 
 export function PageRouter() {
   const page = useRouter((s) => s.page);
@@ -40,6 +42,10 @@ export function PageRouter() {
       return <AdminPage />;
     case "careers":
       return <CareersPage />;
+    case "privacy":
+      return <PrivacyPage />;
+    case "terms":
+      return <TermsPage />;
     default:
       return <HomePage />;
   }

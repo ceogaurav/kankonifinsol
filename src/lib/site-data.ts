@@ -864,10 +864,13 @@ We don't just find you the lowest rate — we model your amortisation, identify 
 ## How Kankoni helps MSMEs
 We assess your Udyam registration, GST returns and financials to match you with the right scheme and the right bank — often securing blended structures (e.g. a CGTMSE-covered term loan + an overdraft facility) that no single bank would proactively offer. Our MSME specialists handle the paperwork end-to-end.`,
 
-  "balance-transfer-right-time": `A balance transfer can save you lakhs — or cost you money if done wrong. Here's the simple break-even formula that tells you exactly when to switch.
+  "balance-transfer-right-time": `A balance transfer can save you lakhs — or cost you money if done wrong. Here's the comprehensive guide to knowing exactly when and how to switch your home loan.
+
+## The True Cost of High Interest Rates
+Many borrowers secure a home loan, set up their auto-debit for EMIs, and forget about it for years. But staying on an uncompetitive interest rate is one of the most expensive financial mistakes you can make. A difference of just 1% on a ₹50 Lakh loan over 20 years translates to nearly ₹7 Lakh in extra interest paid. A Home Loan Balance Transfer (HLBT) allows you to move your outstanding principal to a new lender offering a lower rate.
 
 ## When a balance transfer makes sense
-A transfer is worth it when the interest savings over the remaining tenure exceed the total cost of switching.
+A transfer is mathematically sound only when the interest savings over the remaining tenure exceed the total cost of switching. 
 
 ### The break-even formula
 **Net savings = (Current rate − New rate) × Outstanding principal × Remaining years − [Processing fee + Legal/valuation charges + Stamp duty]**
@@ -886,20 +889,23 @@ If net savings > 0, switch. If < 0, don't.
 **Net savings:** ₹3.8 lakh − ₹40,000 = **₹3.4 lakh** → switch!
 
 ## When NOT to transfer
-1. **Less than 3 years remaining** — the switching cost often exceeds the savings
-2. **Your current rate is within 0.3% of the best offer** — switching costs eat the gain
-3. **You plan to prepay within 2 years** — you'll close the loan before realising savings
-4. **Your CIBIL has dropped since origination** — you may not qualify for the best new rate
+1. **Less than 3 years remaining** — the switching cost often exceeds the savings because the principal is already low, and the EMI is mostly principal anyway.
+2. **Your current rate is within 0.3% of the best offer** — switching costs eat the gain. Generally, aim for at least a 0.50% drop.
+3. **You plan to prepay within 2 years** — you'll close the loan before realising the break-even point of the switching fees.
+4. **Your CIBIL has dropped since origination** — you may not qualify for the best new rate. Lenders want 750+ for their lowest advertised rates.
 
 ## Hidden costs to watch for
-- **Foreclosure charges** on your current loan (RBI bars these on floating-rate home loans, but fixed-rate loans may charge 2–4%)
-- **Processing fee** on the new loan (0.25–0.50% of the outstanding)
-- **Legal and valuation charges** (₹5,000–₹15,000)
-- **Stamp duty** on the new mortgage (varies by state)
-- **Top-up opportunity** — a transfer often unlocks a top-up loan at the same low rate
+- **Foreclosure charges** on your current loan: RBI bars these on floating-rate home loans, but fixed-rate loans may charge 2–4%.
+- **Processing fee** on the new loan: Typically 0.25–0.50% of the outstanding, plus GST. Always negotiate for a flat fee or full waiver.
+- **Legal and valuation charges**: ₹5,000–₹15,000. The new bank must legally vet the property again.
+- **Stamp duty** on the new mortgage (varies by state).
+- **Insurance premiums**: The new bank may try to bundle a new loan insurance policy. You are NOT legally required to buy it.
 
-## The Kankoni transfer service
-We compute your exact break-even, negotiate the switching-cost waivers, handle all documentation, and often secure a top-up facility at the new lower rate. Our average customer saves ₹4–8 lakh on a balance transfer — and pays nothing for the service.`,
+## The Top-Up Advantage
+One of the biggest hidden benefits of a balance transfer is the ability to take a "Top-Up Loan". Since the property has likely appreciated in value since you bought it, the new bank can sanction additional funds over your outstanding balance. These funds are disbursed at the same low home loan rate and can be used for home renovation, debt consolidation, or funding a child's education—far cheaper than a personal loan.
+
+## The Kankoni Transfer Service
+We compute your exact break-even, negotiate the switching-cost waivers, handle all documentation, and secure the best possible top-up facility if required. Because we partner with over 100 banks, we ensure you aren't just getting a "good" rate, but the *lowest possible* rate for your profile. Our average customer saves ₹4–8 lakh on a balance transfer — and pays nothing for the advisory service.`,
 
 };
 
