@@ -171,7 +171,7 @@ export function Contact() {
                   { icon: Phone, label: "Call Us", val: companyInfo.phone, href: companyInfo.phoneHref },
                   { icon: Mail, label: "Email", val: companyInfo.email, href: `mailto:${companyInfo.email}` },
                   { icon: Clock, label: "Hours", val: companyInfo.hours },
-                  { icon: MapPin, label: "Visit", val: "Bandra Kurla Complex, Mumbai" },
+                  { icon: MapPin, label: "Visit", val: "18/8, Vishal Tower, Sampangi Rama Nagar, Bengaluru" },
                 ].map((c) => {
                   const Inner = (
                     <>
@@ -200,10 +200,11 @@ export function Contact() {
               <div className="relative flex-1 overflow-hidden rounded-2xl border border-border/60 bg-card/50 backdrop-blur">
                 <iframe
                   title="Kankoni Finsol office location"
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=72.86%2C19.05%2C72.90%2C19.08&layer=mapnik&marker=19.065%2C72.88"
-                  className="h-full min-h-[14rem] w-full"
+                  src="https://maps.google.com/maps?q=Vishal%20Tower,%20Sampangi%20Rama%20Nagar,%20Bengaluru&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  className="h-full min-h-[14rem] w-full border-0"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
                 />
               </div>
 
