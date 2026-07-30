@@ -186,7 +186,7 @@ export function QuickApplyModal() {
                     </div>
                     <div>
                       <Label className="text-xs font-medium text-muted-foreground">City</Label>
-                      <Input value={form.city} onChange={(e) => update("city", e.target.value)} className="mt-1.5 h-11 rounded-xl bg-background/60" placeholder="Mumbai" />
+                      <Input value={form.city} onChange={(e) => update("city", e.target.value)} className="mt-1.5 h-11 rounded-xl bg-background/60" placeholder="Bengaluru" />
                     </div>
                   </div>
                   <div>

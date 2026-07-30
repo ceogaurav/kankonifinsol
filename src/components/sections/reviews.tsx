@@ -159,7 +159,7 @@ export function Reviews() {
                 <p className="mt-6 text-center text-lg font-semibold leading-snug">
                   &ldquo;They funded my dream home at the lowest rate I could find anywhere.&rdquo;
                 </p>
-                <p className="mt-2 text-center text-sm text-white/80">Rohit Sharma, Mumbai</p>
+                <p className="mt-2 text-center text-sm text-white/80">Rohit Sharma, Bengaluru</p>
                 <div className="mt-auto pt-6 text-center text-xs text-white/70">
                   500+ video stories · Watch now
                 </div>

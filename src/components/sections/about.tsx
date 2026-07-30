@@ -8,7 +8,7 @@ import {
 import { SectionHeading, Reveal, AnimatedCounter, staggerContainer, staggerItem } from "@/components/site/primitives";
 
 const milestones = [
-  { year: "2018", title: "The beginning", desc: "Kankoni Finsol founded in Mumbai with a mission to democratise premium financial services for every Indian." },
+  { year: "2018", title: "The beginning", desc: "Kankoni Finsol founded in Bengaluru with a mission to democratise premium financial services for every Indian." },
   { year: "2020", title: "100+ bank partnerships", desc: "Crossed our first century of banking partnerships, becoming one of India's most-connected loan aggregators." },
   { year: "2022", title: "₹100 Cr disbursed", desc: "Facilitated over ₹100 crore in loans, earning a 4.9★ Google rating from 10,000+ happy customers." },
   { year: "2023", title: "AI-powered platform", desc: "Launched our AI eligibility engine and digital-first doorstep service across 50+ cities pan-India." },

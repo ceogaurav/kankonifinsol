@@ -115,7 +115,7 @@ const jsonLd = {
   address: {
     "@type": "PostalAddress",
     addressCountry: "IN",
-    addressLocality: "Mumbai",
+    addressLocality: "Bengaluru",
     addressRegion: "Maharashtra",
   },
   hasOfferCatalog: {

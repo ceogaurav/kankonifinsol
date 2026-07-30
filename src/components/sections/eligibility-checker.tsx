@@ -31,7 +31,7 @@ export function EligibilityChecker() {
   const [employment, setEmployment] = React.useState("Salaried");
   const [creditScore, setCreditScore] = React.useState(760);
   const [loanAmount, setLoanAmount] = React.useState(1500000);
-  const [city, setCity] = React.useState("Mumbai");
+  const [city, setCity] = React.useState("Bengaluru");
   const [age, setAge] = React.useState(32);
   const [loanType, setLoanType] = React.useState("Personal Loan");
 
