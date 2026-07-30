@@ -35,9 +35,9 @@ export const services: Service[] = [
     icon: User,
     tagline: "Funds for every milestone",
     description:
-      "Unsecured instant personal loans starting at 10.49% p.a. with minimal documentation and same-day disbursal for your dreams.",
+      "Unsecured instant personal loans starting at 9.99% p.a. with minimal documentation and same-day disbursal for your dreams.",
     features: ["Up to ₹40 Lakh", "No collateral", "24-hour disbursal", "Flexible tenure 1–7 yrs"],
-    rateFrom: "10.49%",
+    rateFrom: "9.99%",
     maxAmount: "₹40,00,000",
     tenure: "1–7 years",
     popular: true,
@@ -933,8 +933,8 @@ export const compareLoanTypes = [
 
 export const compareFeatures: CompareFeature[] = [
   {
-    feature: "Interest rate from",
-    values: { home: "8.35% p.a.", personal: "10.49% p.a.", car: "9.20% p.a.", business: "14.00% p.a.", lap: "9.50% p.a." },
+    feature: "Interest rates",
+    values: { home: "8.35% p.a.", personal: "9.99% p.a.", car: "9.20% p.a.", business: "14.00% p.a.", lap: "9.50% p.a." },
   },
   {
     feature: "Maximum amount",
