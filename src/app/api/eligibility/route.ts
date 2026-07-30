@@ -243,10 +243,10 @@ export async function POST(req: Request) {
 {
   "eligible": boolean,
   "approvalChance": integer 0-100,
-  "eligibleBanks": [ { "bank": "ICICI", "rate": "9.99% p.a.", "maxAmount": "₹40,00,000" } ],
+  "eligibleBanks": [ { "bank": "ICICI", "rate": "9.99% p.a.", "maxAmount": "₹1,00,00,000" } ],
   "estimatedEMI": "₹12,345/mo",
   "interestRate": "9.99% p.a.",
-  "loanAmount": "₹40,00,000",
+  "loanAmount": "₹1,00,00,000",
   "tenure": "5 years",
   "summary": "1-2 sentence human summary",
   "suggestions": ["actionable suggestion", "actionable suggestion", "actionable suggestion"]
@@ -255,7 +255,7 @@ export async function POST(req: Request) {
 Rules:
 - Provide 3 to 5 banks in eligibleBanks from real Indian lenders (ICICI, HDFC, SBI, Axis, Kotak, IDFC First, Bajaj Finance, Tata Capital, Yes Bank, IndusInd, Federal, BOB, PNB, Canara).
 - For Personal Loans (if CIBIL is 730 or above), specifically assign these starting interest rates: ICICI (9.99%), HDFC (9.99%), IDFC First (9.99%), Axis (13.00%), Aditya Birla (13.00%). Do not invent rates below 8.35% for home loans.
-- Amounts must be formatted with ₹ and Indian digit grouping (e.g. ₹40,00,000).
+- Amounts must be formatted with ₹ and Indian digit grouping (e.g. ₹1,00,00,000).
 - approvalChance must be a whole number 0-100 consistent with eligible.
 - suggestions: exactly 3 short, actionable items.
 - Keep summary to 1-2 sentences.

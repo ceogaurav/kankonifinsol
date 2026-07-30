@@ -36,9 +36,9 @@ export const services: Service[] = [
     tagline: "Funds for every milestone",
     description:
       "Unsecured instant personal loans starting at 9.99% p.a. with minimal documentation and same-day disbursal for your dreams.",
-    features: ["Up to ₹40 Lakh", "No collateral", "24-hour disbursal", "Flexible tenure 1–7 yrs"],
+    features: ["Up to ₹1 Cr", "No collateral", "24-hour disbursal", "Flexible tenure 1–7 yrs"],
     rateFrom: "9.99%",
-    maxAmount: "₹40,00,000",
+    maxAmount: "₹1,00,00,000",
     tenure: "1–7 years",
     popular: true,
     accent: "royal",
@@ -938,7 +938,7 @@ export const compareFeatures: CompareFeature[] = [
   },
   {
     feature: "Maximum amount",
-    values: { home: "₹15 Crore", personal: "₹40 Lakh", car: "₹1 Crore", business: "₹5 Crore", lap: "₹25 Crore" },
+    values: { home: "₹15 Crore", personal: "₹1 Crore", car: "₹1 Crore", business: "₹5 Crore", lap: "₹25 Crore" },
   },
   {
     feature: "Tenure",
