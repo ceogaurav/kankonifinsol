@@ -254,7 +254,7 @@ export async function POST(req: Request) {
 
 Rules:
 - Provide 3 to 5 banks in eligibleBanks from real Indian lenders (ICICI, HDFC, SBI, Axis, Kotak, IDFC First, Bajaj Finance, Tata Capital, Yes Bank, IndusInd, Federal, BOB, PNB, Canara).
-- Use realistic interest rate ranges — never invent rates below 8.35% p.a. for home loans or below 9.99% for personal loans.
+- For Personal Loans, specifically assign these starting interest rates: ICICI (9.99%), HDFC (9.99%), IDFC First (9.99%), Axis (13.00%), Aditya Birla (13.00%). Do not invent rates below 8.35% for home loans.
 - Amounts must be formatted with ₹ and Indian digit grouping (e.g. ₹40,00,000).
 - approvalChance must be a whole number 0-100 consistent with eligible.
 - suggestions: exactly 3 short, actionable items.
