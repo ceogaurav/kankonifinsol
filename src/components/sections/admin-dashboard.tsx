@@ -225,9 +225,7 @@ export function AdminDashboard() {
                   <ShieldCheck className="mr-2 h-4 w-4" /> Access Dashboard
                 </Button>
               </form>
-              <p className="mt-3 text-center text-[11px] text-muted-foreground">
-                Demo key: <code className="rounded bg-muted px-1.5 py-0.5 font-mono">Dayanandam_Kankoni</code>
-              </p>
+
             </div>
           </Reveal>
         </div>
