@@ -16,7 +16,7 @@ const milestones = [
 ];
 
 const leaders = [
-  { name: "Rajesh Kankoni", role: "Founder & CEO", bio: "20+ years in banking. Ex-VP at a leading private bank. CFA.", avatar: "RK", accent: "royal" },
+  { name: "Dayanandam Kankoni", role: "Founder & CEO", bio: "20+ years in banking. Ex-VP at a leading private bank. CFA.", avatar: "DK", accent: "royal" },
   { name: "Anjali Mehta", role: "Chief Financial Officer", bio: "Chartered Accountant. 15+ years in financial planning & risk.", avatar: "AM", accent: "gold" },
   { name: "Vikram Shah", role: "Head of Lending", bio: "18 years in credit & underwriting across 4 major banks.", avatar: "VS", accent: "royal" },
   { name: "Sneha Reddy", role: "Head of Advisory", bio: "CFP, SEBI-registered advisor. Wealth management expert.", avatar: "SR", accent: "gold" },

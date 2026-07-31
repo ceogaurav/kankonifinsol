@@ -991,7 +991,7 @@ export interface Employee {
 }
 
 export const employees: Employee[] = [
-  { id: "emp1", name: "Rajesh Kankoni", role: "Senior RM", email: "rajesh@kankonifinsol.com", phone: "+91 72040 12527", avatar: "RK" },
+  { id: "emp1", name: "Dayanandam Kankoni", role: "Senior RM", email: "dayanandam@kankonifinsol.com", phone: "+91 72040 12527", avatar: "DK" },
   { id: "emp2", name: "Anjali Mehta", role: "Lending Head", email: "anjali@kankonifinsol.com", phone: "+91 72040 12527", avatar: "AM" },
   { id: "emp3", name: "Vikram Shah", role: "Credit Specialist", email: "vikram@kankonifinsol.com", phone: "+91 72040 12527", avatar: "VS" },
   { id: "emp4", name: "Sneha Reddy", role: "Wealth Advisor", email: "sneha@kankonifinsol.com", phone: "+91 72040 12527", avatar: "SR" },
