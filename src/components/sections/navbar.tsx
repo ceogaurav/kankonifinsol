@@ -75,18 +75,15 @@ export function Navbar() {
         <Logo />
 
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
-          {navLinks.slice(0, 2).map((l) => (
-            <button
-              key={l.page}
-              onClick={() => handleNav(l.page)}
-              className={cn(
-                "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                currentPage === l.page ? "bg-accent/60 text-foreground" : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-              )}
-            >
-              {l.label}
-            </button>
-          ))}
+          <button
+            onClick={() => handleNav("home")}
+            className={cn(
+              "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              currentPage === "home" ? "bg-accent/60 text-foreground" : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+            )}
+          >
+            Home
+          </button>
 
           {/* Services mega menu */}
           <div className="relative" onMouseEnter={() => setServicesOpen(true)} onMouseLeave={() => setServicesOpen(false)}>
@@ -130,7 +127,7 @@ export function Navbar() {
             </AnimatePresence>
           </div>
 
-          {navLinks.slice(2).map((l) => (
+          {navLinks.filter(l => ["emi", "compare", "about", "contact"].includes(l.page)).map((l) => (
             <button
               key={l.page}
               onClick={() => handleNav(l.page)}
