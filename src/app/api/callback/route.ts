@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendFormNotification } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,18 @@ export async function POST(req: Request) {
           : null,
         service: isNonEmptyString(body.service) ? body.service.trim() : null,
       },
+    });
+
+    // Send email notification
+    await sendFormNotification({
+      subject: `New Callback Request: ${name}`,
+      html: `
+        <h2>New Callback Request</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Preferred Time:</strong> ${callback.preferredTime || "N/A"}</p>
+        <p><strong>Service:</strong> ${callback.service || "N/A"}</p>
+      `,
     });
 
     return Response.json({ success: true, id: callback.id }, { status: 201 });

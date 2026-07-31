@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendFormNotification } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,16 @@ export async function POST(req: Request) {
         source: "newsletter",
         message: "Subscribed to financial insights newsletter",
       },
+    });
+
+    // Send email notification
+    await sendFormNotification({
+      subject: `New Newsletter Subscription: ${email}`,
+      html: `
+        <h2>New Newsletter Subscription</h2>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong> Subscribed to financial insights newsletter</p>
+      `,
     });
 
     return Response.json({ success: true, id: lead.id }, { status: 201 });

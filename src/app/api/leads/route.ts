@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendFormNotification } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -94,6 +95,25 @@ export async function POST(req: Request) {
         source,
         promoCode,
       },
+    });
+
+    // Send email notification
+    await sendFormNotification({
+      subject: `New Lead: ${name} (${service})`,
+      html: `
+        <h2>New Lead Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Email:</strong> ${email || "N/A"}</p>
+        <p><strong>Service:</strong> ${service}</p>
+        <p><strong>City:</strong> ${lead.city || "N/A"}</p>
+        <p><strong>Loan Amount:</strong> ${lead.loanAmount || "N/A"}</p>
+        <p><strong>Employment:</strong> ${lead.employment || "N/A"}</p>
+        <p><strong>Income:</strong> ${lead.income || "N/A"}</p>
+        <p><strong>Credit Score:</strong> ${lead.creditScore || "N/A"}</p>
+        <p><strong>Message:</strong> ${lead.message || "N/A"}</p>
+        <p><strong>Source:</strong> ${source}</p>
+      `,
     });
 
     return Response.json({ success: true, id: lead.id }, { status: 201 });

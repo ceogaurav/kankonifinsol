@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendFormNotification } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -76,6 +77,20 @@ export async function POST(req: Request) {
         subject: isNonEmptyString(body.subject) ? body.subject.trim() : null,
         message,
       },
+    });
+
+    // Send email notification
+    await sendFormNotification({
+      subject: `New Contact Message: ${record.subject || "General Inquiry"}`,
+      html: `
+        <h2>New Contact Message</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
+        <p><strong>Subject:</strong> ${record.subject || "N/A"}</p>
+        <p><strong>Message:</strong></p>
+        <blockquote style="border-left: 4px solid #ccc; padding-left: 10px;">${message}</blockquote>
+      `,
     });
 
     return Response.json({ success: true, id: record.id }, { status: 201 });
