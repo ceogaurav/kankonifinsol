@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const ADMIN_KEY_DEFAULT = "kankoni-admin";
+const ADMIN_KEY_DEFAULT = "Dayanandam_Kankoni";
 const STATUS_OPTIONS = ["new", "contacted", "qualified", "disbursed", "rejected"] as const;
 type Status = (typeof STATUS_OPTIONS)[number];
 
@@ -226,7 +226,7 @@ export function AdminDashboard() {
                 </Button>
               </form>
               <p className="mt-3 text-center text-[11px] text-muted-foreground">
-                Demo key: <code className="rounded bg-muted px-1.5 py-0.5 font-mono">kankoni-admin</code>
+                Demo key: <code className="rounded bg-muted px-1.5 py-0.5 font-mono">Dayanandam_Kankoni</code>
               </p>
             </div>
           </Reveal>

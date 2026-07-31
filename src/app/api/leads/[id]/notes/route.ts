@@ -3,7 +3,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_KEY = process.env.ADMIN_KEY || "kankoni-admin";
+const ADMIN_KEY = process.env.ADMIN_KEY || "Dayanandam_Kankoni";
 
 interface NotePayload {
   author?: unknown;

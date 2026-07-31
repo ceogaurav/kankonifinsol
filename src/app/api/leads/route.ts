@@ -4,7 +4,7 @@ import { sendFormNotification } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_KEY = process.env.ADMIN_KEY || "kankoni-admin";
+const ADMIN_KEY = process.env.ADMIN_KEY || "Dayanandam_Kankoni";
 
 interface LeadPayload {
   name?: unknown;

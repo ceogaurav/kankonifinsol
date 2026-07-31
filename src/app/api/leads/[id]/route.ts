@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_KEY = process.env.ADMIN_KEY || "kankoni-admin";
+const ADMIN_KEY = process.env.ADMIN_KEY || "Dayanandam_Kankoni";
 
 const VALID_STATUSES = ["new", "contacted", "qualified", "disbursed", "rejected"];
 
