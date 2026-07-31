@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "@/lib/router-store";
+import * as React from "react";
+import { useRouter, type PageName } from "@/lib/router-store";
 import { HomePage } from "@/components/pages/home-page";
 import { ServicesPage } from "@/components/pages/services-page";
 import { EligibilityPage } from "@/components/pages/eligibility-page";
@@ -16,10 +17,20 @@ import { CareersPage } from "@/components/pages/careers-page";
 import { PrivacyPage } from "@/components/pages/privacy-page";
 import { TermsPage } from "@/components/pages/terms-page";
 
-export function PageRouter() {
-  const page = useRouter((s) => s.page);
+export function PageRouter({ initialPage = "home" }: { initialPage?: string }) {
+  const storePage = useRouter((s) => s.page);
+  const [mounted, setMounted] = React.useState(false);
 
-  switch (page) {
+  React.useEffect(() => {
+    setMounted(true);
+    if (initialPage && initialPage !== "home") {
+      useRouter.setState({ page: initialPage as PageName });
+    }
+  }, [initialPage]);
+
+  const activePage = mounted ? storePage : initialPage;
+
+  switch (activePage) {
     case "services":
       return <ServicesPage />;
     case "eligibility":
@@ -50,3 +61,4 @@ export function PageRouter() {
       return <HomePage />;
   }
 }
+

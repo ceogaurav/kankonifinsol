@@ -10,13 +10,16 @@ import { QuickApplyModal } from "@/components/sections/quick-apply-modal";
 import { AdminNotifications } from "@/components/sections/admin-notifications";
 import { ScrollProgress } from "@/components/site/scroll-progress";
 
-export default function Home() {
+export default async function Home(props: { searchParams: Promise<{ p?: string }> }) {
+  const searchParams = await props.searchParams;
+  const initialPage = searchParams?.p || "home";
+
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-background">
       <ScrollProgress />
       <Navbar />
       <main className="flex-1">
-        <PageRouter />
+        <PageRouter initialPage={initialPage} />
       </main>
       <Footer />
 
